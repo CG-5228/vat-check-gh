@@ -118,11 +118,17 @@ const canonical: Readonly<Record<string, { slug: string; name: string }>> = {
   'ADOBE SYSTEMS SOFTWARE IRELAND LIMITED': { slug: 'adobe', name: 'Adobe' },
 };
 export async function downloadPdf(url: string): Promise<Uint8Array> {
-  const response = await fetch(url, { signal: AbortSignal.timeout(60000), redirect: 'follow' });
+  const requestedUrl = new URL(url).href;
+  const response = await fetch(requestedUrl, {
+    signal: AbortSignal.timeout(60000),
+    redirect: 'follow',
+  });
   if (!response.ok)
     throw new Error(`Official PDF request failed: HTTP ${response.status} at ${url}`);
-  if (!response.url.startsWith('https://gra.gov.gh/'))
-    throw new Error(`Official PDF redirected outside gra.gov.gh: ${response.url}`);
+  if (response.redirected || new URL(response.url).href !== requestedUrl)
+    throw new Error(
+      `Official PDF URL moved: requested ${requestedUrl}, received ${response.url}. Review the official source and update its URL before refreshing.`,
+    );
   const bytes = new Uint8Array(await response.arrayBuffer());
   if (new TextDecoder().decode(bytes.subarray(0, 5)) !== '%PDF-')
     throw new Error(

@@ -1,10 +1,8 @@
 'use client';
-import { useState } from 'react';
-import { CheckCircle2, CircleHelp, ArrowRight } from 'lucide-react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { getEligibility, type EligibilityAnswers } from '@/lib/eligibility';
 import { useLanguage } from '@/lib/i18n';
-import { PageIntro } from './ui/shell';
 import { Source } from './ui/source';
 const questions = [
   {
@@ -36,47 +34,31 @@ export default function Eligibility() {
   });
   const [selected, setSelected] = useState<Record<number, boolean>>({});
   const [finished, setFinished] = useState(false);
+  const focusTarget = useRef<HTMLDivElement>(null);
   const q = questions[step] ?? questions[0];
   const outcome = getEligibility(answers);
   const titles = {
-    applies: locale === 'tw' ? 'RTVAT fa ntua yi ho' : 'This payment meets the RTVAT conditions',
+    applies: locale === 'tw' ? 'RTVAT fa ntua yi ho' : 'VAT applies',
     'likely-applies': locale === 'tw' ? 'Ebetumi afa ntua yi ho' : 'RTVAT is likely to apply',
     'does-not-apply':
       locale === 'tw'
         ? 'Ntua yi nhyia RTVAT ahwehwɛdeɛ no'
         : 'This payment does not meet all RTVAT conditions',
-    unclear: locale === 'tw' ? 'Yɛhia nsɛm pii' : 'A little more information is needed',
+    unclear: locale === 'tw' ? 'Yɛhia nsɛm pii' : 'More information is needed',
   };
+  function focusQuestion() {
+    requestAnimationFrame(() => focusTarget.current?.focus());
+  }
   return (
-    <div className="page-container">
-      <PageIntro
-        eyebrow="THE THREE-QUESTION CHECK"
-        title={t.checkTitle}
-        description={t.checkSubtitle}
-      />
-      <div className="panel stepper">
+    <div className="instrument">
+      <h1 className="sr-only">{t.checkTitle}</h1>
+      <div ref={focusTarget} tabIndex={-1} aria-live="polite">
         {!finished ? (
           <>
-            <div className="step-meta">
-              <span>Question {step + 1} of 3</span>
-              <span>About 30 seconds</span>
-            </div>
-            <div
-              className="progress-track"
-              role="progressbar"
-              aria-valuemin={1}
-              aria-valuemax={3}
-              aria-valuenow={step + 1}
-              aria-label={`Step ${step + 1} of 3`}
-            >
-              {questions.map((x, i) => (
-                <span key={x.key} className={i <= step ? 'done' : ''} />
-              ))}
-            </div>
-            <h2 id="question-title">{locale === 'tw' ? q.tw : q.title}</h2>
-            <p className="help">{q.help}</p>
-            <fieldset className="choice-list" aria-labelledby="question-title">
-              <legend className="sr-only">Select an answer</legend>
+            <fieldset className="field" aria-describedby="question-help">
+              <legend className="field-label" id="question-title">
+                {locale === 'tw' ? q.tw : q.title}
+              </legend>
               {(['yes', 'no', 'unsure'] as const).map((value) => (
                 <label className="choice" key={value}>
                   <input
@@ -103,12 +85,36 @@ export default function Eligibility() {
                 </label>
               ))}
             </fieldset>
-            <Source questions="11, 13" />
-            <div className="step-actions">
+            <div
+              className="progress-track"
+              role="progressbar"
+              aria-label="Eligibility check progress"
+              aria-valuemin={1}
+              aria-valuemax={3}
+              aria-valuenow={step + 1}
+            >
+              {questions.map((question, index) => (
+                <span key={question.key} className={index <= step ? 'done' : ''} />
+              ))}
+            </div>
+            <p className="help" id="question-help">
+              {q.help}
+            </p>
+            {!selected[step] && (
+              <p className="help">
+                {locale === 'tw'
+                  ? 'Paw mmuaeɛ bi na kɔ anim.'
+                  : 'Choose an answer to continue. “I’m not sure” is a valid answer.'}
+              </p>
+            )}
+            <div className="controls">
               <button
                 className="button button-light"
                 disabled={step === 0}
-                onClick={() => setStep(step - 1)}
+                onClick={() => {
+                  setStep(step - 1);
+                  focusQuestion();
+                }}
               >
                 {t.back}
               </button>
@@ -118,42 +124,46 @@ export default function Eligibility() {
                 onClick={() => {
                   if (step === 2) setFinished(true);
                   else setStep(step + 1);
+                  focusQuestion();
                 }}
               >
-                {step === 2 ? 'See my result' : t.next}
-                <ArrowRight size={16} />
+                {step === 2 ? (locale === 'tw' ? 'Hwɛ mmuaeɛ no' : 'See my result') : t.next}
               </button>
             </div>
+            <p className="help">
+              <Source questions="11, 13" />
+            </p>
           </>
         ) : (
-          <div className="outcome">
-            <span className={`status-badge ${outcome.result === 'unclear' ? 'warning' : ''}`}>
-              {outcome.result === 'unclear' ? <CircleHelp size={16} /> : <CheckCircle2 size={16} />}
-              Your quick check
-            </span>
-            <h2>{titles[outcome.result]}</h2>
+          <>
+            <h2 className={`result-figure${outcome.result === 'applies' ? ' vat-applies' : ''}`}>
+              {titles[outcome.result]}
+            </h2>
             <p>{outcome.reason}</p>
-            <div className="notice">
+            <p className="help">
               This checks the RTVAT collection conditions only. It does not establish a VAT
               exemption or prove that a particular charge is correct.
-            </div>
-            <Source questions="13–15" />
-            <div className="share-actions">
+            </p>
+            <p className="help">
+              <Source questions="13–15" />
+            </p>
+            <div className="controls">
               <button
                 className="button button-light"
                 onClick={() => {
                   setStep(0);
                   setFinished(false);
                   setSelected({});
+                  focusQuestion();
                 }}
               >
                 {t.restart}
               </button>
               <Link className="button" href="/calculator/">
-                Estimate the tax <ArrowRight size={16} />
+                {locale === 'tw' ? t.calculator : 'Estimate the tax'}
               </Link>
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>

@@ -1,7 +1,6 @@
 'use client';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useState } from 'react';
-import { Share2, Download, X } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { sourceDateLabel } from '@/lib/source';
 export default function ShareCard({
@@ -13,50 +12,64 @@ export default function ShareCard({
 }) {
   const { t } = useLanguage();
   const [status, setStatus] = useState('');
+  const [loading, setLoading] = useState(false);
   async function makeCard() {
     await document.fonts.ready;
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
-    canvas.height = 630;
+    canvas.height = 960;
     const ctx = canvas.getContext('2d');
-    if (!ctx) throw new Error('Image creation is unavailable in this browser.');
-    ctx.fillStyle = '#f3f6ec';
-    ctx.fillRect(0, 0, 1200, 630);
-    ctx.fillStyle = '#174c3c';
-    ctx.fillRect(0, 0, 1200, 12);
-    ctx.fillStyle = '#eec96b';
-    ctx.fillRect(0, 0, 190, 12);
-    ctx.font = '600 30px "DM Sans",sans-serif';
-    ctx.fillText('VAT Check GH', 65, 86);
-    ctx.font = '500 56px "DM Sans",sans-serif';
-    const display = name.length > 35 ? name.slice(0, 34) + '…' : name;
-    ctx.fillText(display, 65, 187, 1070);
-    ctx.font = '600 25px "DM Sans",sans-serif';
+    if (!ctx) throw new Error('Image creation is unavailable.');
+    ctx.fillStyle = '#F7F5F0';
+    ctx.fillRect(0, 0, 1200, 960);
+    ctx.fillStyle = '#1A1A1A';
+    ctx.font = '600 32px "Instrument Sans",sans-serif';
+    ctx.fillText('VAT Check GH', 64, 80);
+    ctx.font = '600 48px "Instrument Sans",sans-serif';
+    ctx.fillText(name.length > 38 ? name.slice(0, 37) + '…' : name, 64, 176, 1072);
+    ctx.font = '400 28px "Instrument Sans",sans-serif';
     ctx.fillText(
-      registered ? '✓ On GRA’s registered merchant list' : 'Not on this GRA list',
-      65,
-      246,
+      registered ? 'On GRA’s registered merchant list' : 'Not on this GRA list',
+      64,
+      232,
     );
-    ctx.font = '400 28px "DM Sans",sans-serif';
     const lines = registered
       ? [
-          'Registration does not confirm whether tax is included.',
+          'Registration does not confirm that tax is included.',
           'GRA says VAT is collected at payment.',
-          'Check the receipt before querying an extra charge.',
         ]
       : [
           'Absence from this list does not mean tax-free.',
-          'Your payment provider may collect VAT if it qualifies.',
+          'Your provider may collect VAT if the payment qualifies.',
         ];
-    lines.forEach((line, i) => ctx.fillText(line, 65, 322 + i * 44));
-    ctx.fillStyle = '#5d6d65';
-    ctx.font = '400 19px "DM Sans",sans-serif';
-    ctx.fillText(`Data as of ${sourceDateLabel} · GRA FAQ Q13–15, page 2`, 65, 526);
-    ctx.fillText(
-      'Not affiliated with GRA. Not tax or legal advice. Check official GRA guidance.',
-      65,
-      566,
-    );
+    lines.forEach((line, i) => ctx.fillText(line, 64, 296 + i * 40));
+    ctx.strokeStyle = '#1A1A1A';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(64, 480);
+    ctx.lineTo(1136, 480);
+    ctx.stroke();
+    ctx.font = '400 24px "Instrument Sans",sans-serif';
+    const rows = [
+      ['Example price before tax', 'GH₵100.00'],
+      ['VAT 15%', 'GH₵15.00'],
+      ['NHIL 2.5%', 'GH₵2.50'],
+      ['GETFund 2.5%', 'GH₵2.50'],
+    ];
+    rows.forEach(([label, value], i) => {
+      ctx.textAlign = 'left';
+      ctx.fillText(label ?? '', 64, 528 + i * 48);
+      ctx.textAlign = 'right';
+      ctx.fillText(value ?? '', 1136, 528 + i * 48);
+    });
+    ctx.textAlign = 'left';
+    ctx.font = '400 56px "Instrument Sans",sans-serif';
+    ctx.fillText('GH₵120.00', 64, 440);
+    ctx.font = '400 22px "Instrument Sans",sans-serif';
+    ctx.fillText(`Data as of ${sourceDateLabel}. GRA FAQ Q9, Q13–15.`, 64, 760);
+    ctx.fillText('Not affiliated with GRA. Not tax or legal advice.', 64, 808);
+    ctx.fillText('Check official GRA guidance.', 64, 848);
+    ctx.fillText('Rates and base: gra.gov.gh/domestic-tax/tax-types/vat/', 64, 888);
     return new Promise<Blob>((resolve, reject) =>
       canvas.toBlob(
         (b) => (b ? resolve(b) : reject(new Error('Could not create the share card.'))),
@@ -65,6 +78,8 @@ export default function ShareCard({
     );
   }
   async function share() {
+    setLoading(true);
+    setStatus('Preparing image…');
     try {
       const blob = await makeCard();
       const file = new File([blob], 'vat-check-gh-result.png', { type: 'image/png' });
@@ -81,55 +96,48 @@ export default function ShareCard({
         setStatus('Share card downloaded');
       }
     } catch (e) {
-      if (e instanceof Error && e.name === 'AbortError') return;
-      setStatus('Image sharing is unavailable. You can copy the page link.');
+      if (e instanceof Error && e.name === 'AbortError') setStatus('Sharing cancelled.');
+      else setStatus('The image could not be created. You can copy the page link instead.');
+    } finally {
+      setLoading(false);
     }
   }
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="button button-light">
-          <Share2 size={16} />
-          {t.share}
-        </button>
+        <button className="button button-light">{t.share}</button>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog-content">
-          <Dialog.Title>Share a little clarity.</Dialog.Title>
+          <Dialog.Title>Share this result</Dialog.Title>
           <Dialog.Description className="help">
-            Create a private, local image of this result. Your entries are not sent anywhere.
+            The image is created on this device. Nothing is sent by this site.
           </Dialog.Description>
           <div className="share-preview">
-            <span className="eyebrow">VAT CHECK GH</span>
             <strong>{name}</strong>
-            <span className="status-badge">
-              {registered ? '✓ On the GRA list' : 'Not on this GRA list'}
-            </span>
             <p>
               {registered
-                ? 'Registration does not confirm whether tax is included. GRA says VAT is collected at payment.'
-                : 'Not on this list does not mean tax-free. Tax may be collected if the payment qualifies.'}
+                ? 'On the GRA registered merchant list. Registration does not confirm that tax is included.'
+                : 'Not on this GRA list. This does not mean tax-free.'}
             </p>
-            <small>Data as of {sourceDateLabel} · GRA FAQ Q13–15</small>
+            <p>Example: GH₵100.00 before tax, plus 20%, gives GH₵120.00.</p>
+            <small>Data as of {sourceDateLabel}. GRA FAQ Q9 and Q13–15.</small>
           </div>
           <button
-            className="button"
-            style={{ marginTop: 21 }}
+            className="button button-light"
+            disabled={loading}
             onClick={() => {
               void share();
             }}
           >
-            <Download size={16} />
             Share or download image
           </button>
           <p role="status" className="copy-status">
             {status}
           </p>
           <Dialog.Close asChild>
-            <button className="icon-button dialog-close" aria-label="Close share dialog">
-              <X size={20} />
-            </button>
+            <button className="text-button dialog-close">Close share dialog</button>
           </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>

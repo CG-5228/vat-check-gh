@@ -1,5 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const previewPort = Number(process.env.PLAYWRIGHT_PORT ?? 4173);
+if (!Number.isInteger(previewPort) || previewPort < 1 || previewPort > 65535)
+  throw new Error('PLAYWRIGHT_PORT must be an integer from 1 to 65535.');
+const previewOrigin = `http://127.0.0.1:${previewPort}`;
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -7,7 +12,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL: previewOrigin,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
@@ -19,8 +24,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm exec serve out -l tcp://127.0.0.1:4173',
-    url: 'http://127.0.0.1:4173',
+    command: `pnpm exec serve out -l tcp://127.0.0.1:${previewPort}`,
+    url: previewOrigin,
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,
   },

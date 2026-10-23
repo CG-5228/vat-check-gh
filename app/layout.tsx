@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import '@fontsource/dm-sans/latin-400.css';
-import '@fontsource/dm-sans/latin-500.css';
-import '@fontsource/dm-sans/latin-600.css';
-import '@fontsource/dm-sans/latin-700.css';
+import '@fontsource/instrument-sans/latin-400.css';
+
+import '@fontsource/instrument-sans/latin-600.css';
+
 import './globals.css';
 import { LanguageProvider } from '@/lib/i18n';
 import { Header, Footer } from '@/components/ui/shell';
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: { type: 'website', siteName: 'VAT Check GH', images: ['/opengraph-image.png'] },
   icons: { icon: '/icon.svg' },
 };
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#174c3c' };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#F7F5F0' };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">

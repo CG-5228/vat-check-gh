@@ -7,9 +7,17 @@ module.exports = {
         'http://localhost/calculator/',
         'http://localhost/apply/',
         'http://localhost/faq/',
+        'http://localhost/about/',
+        'http://localhost/double-charge/',
+        'http://localhost/check/netflix/',
+        'http://localhost/check/canva/',
       ],
       numberOfRuns: 3,
-      settings: { formFactor: 'mobile', chromeFlags: '--no-sandbox --headless' },
+      settings: {
+        formFactor: 'mobile',
+        chromeFlags: '--no-sandbox --headless',
+        onlyCategories: ['performance', 'accessibility', 'seo'],
+      },
     },
     assert: {
       assertions: {

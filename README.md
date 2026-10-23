@@ -64,7 +64,7 @@ A passing CI run is evidence only for that revision and the environments it test
 
 **Twi needs native-speaker review before a public release.** Draft translations are identified in code. English source citations remain available in both languages. Review tax terms, ordinary Ghanaian usage and every result message with a native speaker.
 
-Screenshot placeholder: add a mobile search view and a desktop calculator view to `docs/screenshots/` after the final visual review.
+Screenshots are in `docs/screenshots/`. The design contract and accessibility choices are recorded in [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Architecture and privacy
 
@@ -76,7 +76,7 @@ The browser does not retrieve GRA documents automatically. Links open official s
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Propose aliases through the new-alias issue template, attach evidence connecting each brand to an exact legal entity already on the official list, and include a regression test. Multiple legal entities must remain visible as separate choices. Do not infer an alias from a similar name or treat list absence as an exemption.
 
-The repository origin is not configured by this starter. After creating the public repository, configure its contribution/issue URL in the app’s central configuration. Do not publish links to an invented repository.
+Source and issue templates: [github.com/KingEmma7/vat-check-gh](https://github.com/KingEmma7/vat-check-gh). The repository and merchant issue URLs live in `lib/seo.ts`.
 
 ## Deploy
 
@@ -95,7 +95,7 @@ Set the production origin in the single site configuration constant used by cano
 - [ ] Walk each screen at 360px and desktop, using only the keyboard, in English and Twi.
 - [ ] Check zero, half-pesewa and awkward inclusive amounts, and recompute three examples independently.
 - [ ] Inspect the exported merchant pages with JavaScript disabled and verify sitemap coverage.
-- [ ] Set the real production origin and public contribution links; inspect canonical and Open Graph URLs.
+- [ ] Verify the production origin and public contribution links; inspect canonical and Open Graph URLs.
 - [ ] Verify CSP, security headers, local-only asset requests and offline behavior on the chosen host.
 - [ ] Publish a release report with merchant count, source date, checksum, test results and known gaps.
 
@@ -111,4 +111,4 @@ No accounts, backend or database; reading SMS or bank statements; scraping banks
 - [GRA VAT rates and 2026 reform](https://gra.gov.gh/domestic-tax/tax-types/vat/)
 - [KPMG summary, 21 October 2026](https://kpmg.com/us/en/taxnewsflash/news/2026/10/tnf-ghana-real-time-vat-collection-on-cross-border-digital-services.html)
 
-MIT licensed. The GRA source documents are referenced as source material; the application’s MIT license does not relicense government or third-party documents.
+Application code is MIT licensed. Instrument Sans is distributed under the SIL Open Font License in `public/fonts/INSTRUMENT-SANS-LICENSE.txt`. The GRA source documents are referenced as source material; the application’s MIT license does not relicense government or third-party documents.

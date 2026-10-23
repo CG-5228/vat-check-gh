@@ -4,7 +4,7 @@ VAT Check GH is a static app. It should not collect payment credentials, stateme
 
 ## Reporting
 
-Use the repository’s **Security → Report a vulnerability** feature when private vulnerability reporting is enabled. If unavailable, contact a maintainer privately through a contact method on their public profile. Do not disclose an exploit, personal data or credentials in a public issue. No security email address has been designated yet; maintainers should configure private reporting before a public launch.
+Private vulnerability reporting is enabled for [KingEmma7/vat-check-gh](https://github.com/KingEmma7/vat-check-gh/security). Use its **Report a vulnerability** action to contact the maintainer privately. Do not disclose an exploit, personal data or credentials in a public issue.
 
 Include the affected revision, steps to reproduce, expected and observed behavior, and the likely impact. Redact financial and personal information. Maintainers should acknowledge reports and agree on a disclosure timeline; no response deadline is promised by this initial policy.
 

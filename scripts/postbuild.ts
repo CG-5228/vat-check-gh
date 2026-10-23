@@ -1,6 +1,7 @@
 import { readFile, writeFile, readdir, copyFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { ogFonts } from '../lib/og';
 import { sourceDateLabel } from '../lib/source';
 async function walk(dir: string): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -82,6 +83,7 @@ console.log(
   `Static export ready: ${files.filter((f) => f.endsWith('.html')).length} HTML pages, per-page script hashes, same-origin offline cache.`,
 );
 const { ImageResponse } = await import('next/og');
+const fonts = await ogFonts();
 const { createElement } = await import('react');
 const { merchants, merchantName } = await import('../lib/merchants');
 for (const item of [
@@ -100,10 +102,11 @@ for (const item of [
         flexDirection: 'column',
         width: '100%',
         height: '100%',
-        background: '#eff3e8',
-        padding: '65px',
-        color: '#174c3c',
-        borderTop: '14px solid #eec96b',
+        fontFamily: 'Instrument Sans',
+        background: '#F7F5F0',
+        padding: '64px',
+        color: '#1A1A1A',
+        fontWeight: 400,
       },
     },
     createElement('div', { style: { display: 'flex', fontSize: 29 } }, 'VAT Check GH'),
@@ -112,35 +115,35 @@ for (const item of [
       {
         style: {
           display: 'flex',
-          fontSize: item.name.length > 40 ? 43 : 62,
+          fontSize: item.name.length > 40 ? 40 : 56,
           lineHeight: 1.1,
-          marginTop: 65,
+          marginTop: 64,
         },
       },
       item.name,
     ),
     createElement(
       'div',
-      { style: { display: 'flex', fontSize: 27, marginTop: 35 } },
+      { style: { display: 'flex', fontSize: 27, marginTop: 32 } },
       item.listed ? 'On the GRA registered merchant list' : 'Not on this GRA list',
     ),
     createElement(
       'div',
-      { style: { display: 'flex', fontSize: 25, marginTop: 30 } },
+      { style: { display: 'flex', fontSize: 25, marginTop: 32 } },
       'Registration does not confirm whether tax is included.',
     ),
     createElement(
       'div',
-      { style: { display: 'flex', fontSize: 21, marginTop: 45 } },
+      { style: { display: 'flex', fontSize: 21, marginTop: 48 } },
       `Data as of ${sourceDateLabel} · GRA FAQ Q13–15`,
     ),
     createElement(
       'div',
-      { style: { display: 'flex', fontSize: 18, marginTop: 20 } },
+      { style: { display: 'flex', fontSize: 18, marginTop: 24 } },
       'Not affiliated with GRA. Not tax or legal advice.',
     ),
   );
-  const response = new ImageResponse(element, { width: 1200, height: 630 });
+  const response = new ImageResponse(element, { width: 1200, height: 630, fonts });
   await writeFile(`out/check/${item.slug}/og.png`, Buffer.from(await response.arrayBuffer()));
 }
 console.log('Generated 93 merchant Open Graph images.');

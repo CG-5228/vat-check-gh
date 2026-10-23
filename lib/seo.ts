@@ -18,3 +18,6 @@ export function pageMetadata(title: string, path: string, description: string): 
     },
   };
 }
+
+export const REPOSITORY_URL = 'https://github.com/KingEmma7/vat-check-gh';
+export const MERCHANT_ISSUE_URL = `${REPOSITORY_URL}/issues/new?template=wrong-merchant.md`;

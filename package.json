@@ -20,7 +20,6 @@
     "lighthouse": "lhci autorun"
   },
   "dependencies": {
-    "@fontsource/dm-sans": "latest",
     "@radix-ui/react-dialog": "latest",
     "@radix-ui/react-popover": "latest",
     "@radix-ui/react-tabs": "latest",
@@ -30,7 +29,8 @@
     "next": "15",
     "react": "19",
     "react-dom": "19",
-    "zod": "latest"
+    "zod": "latest",
+    "@fontsource/instrument-sans": "latest"
   },
   "devDependencies": {
     "@axe-core/playwright": "latest",

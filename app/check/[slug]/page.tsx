@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CheckCircle2, Calculator, ArrowRight, CircleHelp } from 'lucide-react';
 import { merchants, getMerchant, merchantName, sourceMeta } from '@/lib/merchants';
-import { SITE_URL, pageMetadata } from '@/lib/seo';
+import { SITE_URL, pageMetadata, MERCHANT_ISSUE_URL } from '@/lib/seo';
 import { sourceDateLabel, verifiedAtLabel } from '@/lib/source';
 import { Source } from '@/components/ui/source';
 import ShareCard from '@/components/share/share-card';
 import ResultMeaning from '@/components/result/result-meaning';
+
 export const dynamicParams = false;
 export function generateStaticParams() {
   return [...merchants.map((m) => ({ slug: m.slug })), { slug: 'canva' }];
@@ -25,142 +25,118 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: { ...meta.openGraph, images: [`${SITE_URL}/check/${slug}/og.png`] },
   };
 }
+
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const m = getMerchant(slug);
   if (!m && slug !== 'canva') notFound();
   const name = m ? merchantName(m) : 'Canva';
+
   return (
     <div className="page-container">
-      <div className="result-header">
-        <Link href="/" className="back-link">
-          ← Check another service
-        </Link>
-        <br />
-        <span className={`status-badge ${!m ? 'warning' : ''}`}>
-          {m ? <CheckCircle2 size={15} /> : <CircleHelp size={15} />}{' '}
-          {m ? 'On the GRA list' : 'Not on this GRA list'}
-        </span>
-        <h1 className="result-title">{name}</h1>
-        <p className="legal-name">
-          {m
-            ? `Listed legal entity: ${m.legalName}`
-            : 'The name Canva was not found in the published snapshot. This is a list lookup, not an exemption.'}
+      <h1>{name}</h1>
+      <p>
+        {m ? 'On the GRA list' : 'Not on this GRA list'} as of {sourceDateLabel}.
+      </p>
+      <p>
+        {m
+          ? `Listed legal entity: ${m.legalName}`
+          : `The name Canva was not found among the ${merchants.length} published entries. A different billing entity may appear on your receipt.`}
+      </p>
+      {m ? (
+        <ResultMeaning />
+      ) : (
+        <p>
+          Your bank or MoMo may add tax at payment if the transaction qualifies. Absence from this
+          dated list does not establish an exemption.
         </p>
-        <Source questions="14–15" />
-      </div>
-      <div className="result-grid">
-        <section className="panel">
-          {m ? (
-            <ResultMeaning />
-          ) : (
-            <>
-              <h2>Not listed does not mean tax-free.</h2>
-              <p>
-                Not on GRA’s list as of {sourceDateLabel}. Your bank or MoMo may add tax at payment
-                if the transaction qualifies. The list is a dated snapshot and may not include a
-                different billing entity.
-              </p>
-            </>
-          )}
-          <div className="result-steps">
-            <div>
-              <span className="step-num">1</span>
-              <p>
-                <strong>Check the actual seller.</strong>
-                <br />
-                Read the legal entity on your receipt, especially when paying through an app store.
-              </p>
-            </div>
-            <div>
-              <span className="step-num">2</span>
-              <p>
-                <strong>Look for Ghana tax.</strong>
-                <br />A listed merchant can sell different things. The payment must still meet all
-                three RTVAT conditions.
-              </p>
-            </div>
-            <div>
-              <span className="step-num">3</span>
-              <p>
-                <strong>Query a charge with evidence.</strong>
-                <br />
-                If the merchant already charged tax, compare that receipt with your payment
-                statement before asking your provider to review it.
-              </p>
-            </div>
-          </div>
-          <div className="source-stack">
-            <Source questions="13–15" />
-            <Source questions="12" />
-          </div>
-          <div className="share-actions">
-            <ShareCard name={name} registered={!!m} />
-            <Link className="button" href="/double-charge/">
-              Check a charge <ArrowRight size={15} />
-            </Link>
-          </div>
-        </section>
-        <aside className="panel estimate-panel">
-          <h2>A simple example</h2>
-          <p>A qualifying service priced at GH₵100.00 before tax:</p>
-          <table className="breakdown">
-            <caption className="sr-only">Example Ghana tax breakdown</caption>
-            <tbody>
-              <tr>
-                <th scope="row">Price before tax</th>
-                <td>GH₵100.00</td>
-              </tr>
-              <tr>
-                <th scope="row">VAT · 15%</th>
-                <td>GH₵15.00</td>
-              </tr>
-              <tr>
-                <th scope="row">NHIL · 2.5%</th>
-                <td>GH₵2.50</td>
-              </tr>
-              <tr>
-                <th scope="row">GETFund · 2.5%</th>
-                <td>GH₵2.50</td>
-              </tr>
-            </tbody>
-          </table>
-          <div className="grand-total">
-            <span>Total</span>
-            <strong>GH₵120.00</strong>
-          </div>
-          <Source questions="9" />
-          <p className="help">
-            <a href="https://gra.gov.gh/domestic-tax/tax-types/vat/">GRA VAT guidance ↗</a> confirms
-            that the levies and VAT share the same base. Your receipt and provider’s treatment still
-            need to be checked.
-          </p>
-          <Link href="/calculator/" className="button button-light">
-            <Calculator size={15} />
-            Use your own amount
-          </Link>
-        </aside>
-      </div>
-      <div className="result-source">
-        <strong>Trace this result</strong>
-        <br />
+      )}
+      <Source questions="14–15" />
+      <p>
+        RTVAT applies when the supplier is outside Ghana, the service is delivered electronically
+        and the payment instrument is issued in Ghana. Registration alone cannot establish whether
+        your purchase meets these conditions.
+      </p>
+      <Source questions="11, 13" />
+      <p>
+        <Link href="/apply/">Check whether your payment qualifies</Link>
+      </p>
+
+      <h2>Example payment</h2>
+      <p>For a qualifying digital service priced at GH₵100.00 before tax:</p>
+      <p>Total you pay</p>
+      <p className="result-figure">GH₵120.00</p>
+      <table className="breakdown">
+        <caption className="sr-only">Example Ghana tax breakdown</caption>
+        <tbody>
+          <tr>
+            <th scope="row">Price before tax</th>
+            <td>GH₵100.00</td>
+          </tr>
+          <tr>
+            <th scope="row">VAT (15%)</th>
+            <td>GH₵15.00</td>
+          </tr>
+          <tr>
+            <th scope="row">NHIL (2.5%)</th>
+            <td>GH₵2.50</td>
+          </tr>
+          <tr>
+            <th scope="row">GETFund (2.5%)</th>
+            <td>GH₵2.50</td>
+          </tr>
+          <tr>
+            <th scope="row">Total tax (20%)</th>
+            <td>GH₵20.00</td>
+          </tr>
+          <tr>
+            <th scope="row">Total</th>
+            <td>GH₵120.00</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        VAT and both levies use the same price before tax.{' '}
+        <a href={sourceMeta.ratesUrl}>GRA VAT rates and calculation base</a>.
+      </p>
+      <Source questions="9" />
+      <p>
+        <Link href="/calculator/">Calculate your own amount</Link>
+      </p>
+
+      <h2>Query a charge</h2>
+      <p>
+        Check the legal seller and tax breakdown on your receipt. Compare the receipt with your
+        settled statement, including related tax debits. If wrongly collected VAT is not refunded
+        automatically, notify the bank or electronic money issuer you paid through.
+      </p>
+      <Source questions="12" />
+      <p>
+        <Link href="/double-charge/">Compare a receipt and statement</Link>
+      </p>
+      <ShareCard name={name} registered={!!m} />
+
+      <h2>Source</h2>
+      <p>
         {m ? (
           <>
-            Official GRA registered non-resident merchants list, page {m.sourcePage}.{' '}
-            <a href={`${m.sourceUrl}#page=${m.sourcePage}`}>View the original entry ↗</a>
+            GRA registered non-resident merchants list, page {m.sourcePage}.{' '}
+            <a href={`${m.sourceUrl}#page=${m.sourcePage}`}>Read the original entry</a>.
           </>
         ) : (
           <>
             Name checked against all {merchants.length} entries.{' '}
-            <a href={sourceMeta.merchantsPdfUrl}>View the complete official list ↗</a>
+            <a href={sourceMeta.merchantsPdfUrl}>Read the official merchant list</a>.
           </>
         )}
-        <br />
-        List dated {sourceDateLabel}. Guidance checked {verifiedAtLabel}. Snapshot status cannot
-        prove how a particular payment was taxed.
-        <br />
-        <Link href="/about/#contribute">Report a missing merchant or incorrect name →</Link>
-      </div>
+      </p>
+      <p>
+        List dated {sourceDateLabel}. Guidance checked {verifiedAtLabel}. This snapshot cannot
+        establish how a particular payment was taxed.
+      </p>
+      <p>
+        <a href={MERCHANT_ISSUE_URL}>Report a missing merchant or incorrect name</a>
+      </p>
     </div>
   );
 }

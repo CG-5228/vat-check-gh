@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import {
@@ -11,7 +11,13 @@ import { normalizeName, resolveAlias, validateAliases } from '../lib/aliases';
 import { getMerchant, merchants, searchMerchants, sourceMeta } from '../lib/merchants';
 import aliases from '../data/aliases.json';
 import rates from '../data/rates.json';
-import { extractPdfLines, parseMerchantLines, type PdfLine } from '../scripts/build-merchants';
+import {
+  downloadPdf,
+  MERCHANTS_URL,
+  extractPdfLines,
+  parseMerchantLines,
+  type PdfLine,
+} from '../scripts/build-merchants';
 
 const header: PdfLine = { page: 1, text: 'NO. TIN NAME OF NON RESIDENT MERCHANT' };
 const fixture = (): PdfLine[] => [
@@ -106,5 +112,35 @@ describe('PDF extraction safeguards', () => {
     expect(() =>
       parseMerchantLines([...fixture(), { page: 2, text: 'UNKNOWN TABLE COLUMN' }]),
     ).toThrow(/Unrecognised/);
+  });
+});
+
+describe('official PDF URL freshness', () => {
+  afterEach(() => vi.unstubAllGlobals());
+  function response(url: string, redirected = false): Response {
+    const value = new Response('%PDF-unchanged-source-bytes');
+    Object.defineProperties(value, { url: { value: url }, redirected: { value: redirected } });
+    return value;
+  }
+  it('accepts the exact normalized official URL', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response(MERCHANTS_URL)));
+    const bytes = await downloadPdf(MERCHANTS_URL);
+    expect(new TextDecoder().decode(bytes)).toBe('%PDF-unchanged-source-bytes');
+  });
+  it('flags a same-origin moved source even when the PDF bytes are unchanged', async () => {
+    const moved = 'https://gra.gov.gh/wp-content/uploads/2026/11/merchants.pdf';
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response(moved, true)));
+    await expect(downloadPdf(MERCHANTS_URL)).rejects.toThrow(`received ${moved}`);
+  });
+  it('rejects an unexpected final URL even without a redirect indicator', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(response('https://example.com/merchants.pdf')),
+    );
+    await expect(downloadPdf(MERCHANTS_URL)).rejects.toThrow(/Official PDF URL moved/);
+  });
+  it('flags a redirect even if the final URL returns to the original location', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response(MERCHANTS_URL, true)));
+    await expect(downloadPdf(MERCHANTS_URL)).rejects.toThrow(/Official PDF URL moved/);
   });
 });

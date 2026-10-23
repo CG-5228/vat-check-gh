@@ -26,6 +26,7 @@ const routes = [
   '/faq/',
   '/about/',
   merchantRoute,
+  '/check/canva/',
 ];
 
 for (const locale of ['English', 'Twi'] as const) {
@@ -110,9 +111,16 @@ test('unmatched service explains the dated list without claiming an exemption', 
   page,
 }) => {
   await page.goto('/');
-  await page.getByRole('combobox', { name: 'Service or merchant' }).fill('zzzzunknownserviceqxp');
+  const search = page.getByRole('combobox', { name: 'Service or merchant' });
+  await search.fill('zzzzunknownserviceqxp');
   await expect(page.locator('main')).toContainText(/not on|no match|couldn.t find/i);
   await expect(page.locator('main')).toContainText(/bank|MoMo|payment provider/i);
+  await search.press('ArrowUp');
+  await expect(search).not.toHaveAttribute('aria-activedescendant', /.+/);
+  await search.press('Enter');
+  await expect(page).toHaveURL(/\/$/);
+  await search.press('Escape');
+  await expect(search).toHaveAttribute('aria-expanded', 'false');
 });
 
 test('calculator shows the same-base 20 percent example and validates negative amounts', async ({
@@ -159,11 +167,10 @@ test('eligibility supports back, an honest uncertain outcome, and restart', asyn
   await page.getByRole('button', { name: 'Next', exact: true }).click();
   await page.getByRole('radio', { name: 'Yes', exact: true }).check();
   await page.getByRole('button', { name: 'See my result' }).click();
-  await expect(
-    page.getByRole('heading', { name: 'A little more information is needed' }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'More information is needed' })).toBeVisible();
   await page.getByRole('button', { name: 'Start again' }).click();
-  await expect(page.getByText('Question 1 of 3')).toBeVisible();
+  await expect(page.locator('input[name="outsideGhana"]')).toHaveCount(3);
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
   await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled();
 });
 
@@ -174,7 +181,8 @@ test('eligibility keeps the selected answer when language changes mid-flow', asy
   await page.getByRole('radio', { name: 'No', exact: true }).check();
   await page.getByRole('button', { name: 'Switch to Twi' }).click();
   await expect(page.getByRole('radio', { name: 'Daabi', exact: true })).toBeChecked();
-  await expect(page.getByText('Question 2 of 3')).toBeVisible();
+  await expect(page.locator('input[name="digitalService"]')).toHaveCount(3);
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '2');
   await page.getByRole('button', { name: 'Switch to English' }).click();
   await expect(page.getByRole('radio', { name: 'No', exact: true })).toBeChecked();
 });
@@ -197,7 +205,12 @@ test('charge helper distinguishes uncertain, duplicate, ordinary tax, and lower 
 }) => {
   await page.goto('/double-charge/');
   await page.getByLabel('Merchant charged (GHS)', { exact: true }).fill('100');
-  await expect(page.getByRole('heading', { name: 'Let’s compare the two amounts.' })).toBeVisible();
+  await expect(
+    page.getByText(
+      'Enter both GHS amounts to compare the charge. Your entries stay in this browser.',
+      { exact: true },
+    ),
+  ).toBeVisible();
   await page.getByLabel('Statement shows (GHS)', { exact: true }).fill('120');
   await expect(
     page.getByRole('heading', { name: 'The amounts alone cannot settle this' }),
@@ -225,7 +238,9 @@ test('charge helper distinguishes uncertain, duplicate, ordinary tax, and lower 
   );
 });
 
-test('share dialog creates a local PNG and returns focus after closing', async ({ page }) => {
+test('share dialog creates a local PNG and returns focus after closing', async ({
+  page,
+}, testInfo) => {
   await page.goto(merchantRoute);
   const trigger = page.getByRole('button', { name: 'Share this result', exact: true });
   await trigger.click();
@@ -235,18 +250,29 @@ test('share dialog creates a local PNG and returns focus after closing', async (
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe('vat-check-gh-result.png');
   expect(await download.failure()).toBeNull();
+  const imageDirectory = path.resolve('..', 'work', 'qa');
+  mkdirSync(imageDirectory, { recursive: true });
+  await download.saveAs(path.join(imageDirectory, `share-image-${testInfo.project.name}.png`));
   await page.getByRole('button', { name: 'Close share dialog' }).click();
   await expect(trigger).toBeFocused();
 });
 
-test('a visited merchant page and its search assets work offline', async ({ page, context }) => {
+test('a client-navigated merchant page and search work offline after a hard reload', async ({
+  page,
+  context,
+}) => {
+  const chosen = merchants.find((merchant) => merchant.slug === 'netflix') ?? first;
   await page.goto('/');
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
-  await page.goto(merchantRoute);
+  const search = page.getByRole('combobox', { name: 'Service or merchant' });
+  await search.fill(chosen.slug === 'netflix' ? 'netflix' : chosen.legalName.slice(0, 8));
+  await search.press('ArrowDown');
+  await search.press('Enter');
+  await expect(page).toHaveURL(new RegExp(`/check/${chosen.slug}/$`));
   await page.waitForFunction(async () => Boolean(await caches.match(location.href)));
   await context.setOffline(true);
   await page.reload();
-  await expect(page.locator('main')).toContainText(first.legalName);
+  await expect(page.locator('main')).toContainText(chosen.legalName);
   await expect(page.getByRole('button', { name: 'Share this result', exact: true })).toBeVisible();
   await page.goto('/');
   await page
@@ -265,23 +291,162 @@ test('calculator switches inclusive mode and preserves an awkward entered total'
   await page.getByRole('radio', { name: 'Price already includes tax', exact: true }).click();
   await expect(page.getByRole('row', { name: /Price before tax/ })).toContainText('100.00');
   await amount.fill('99.99');
-  await expect(page.locator('.grand-total')).toContainText('99.99');
+  await expect(page.locator('.result-figure')).toContainText('99.99');
   await amount.fill('0');
-  await expect(page.locator('.grand-total')).toContainText('0.00');
+  await expect(page.locator('.result-figure')).toContainText('0.00');
 });
 
-test('capture desktop and mobile reference views', async ({ page }, testInfo) => {
+test('capture every page and principal interaction state', async ({ page }, testInfo) => {
+  test.setTimeout(120_000);
   const directory = path.resolve('..', 'work', 'qa');
   mkdirSync(directory, { recursive: true });
-  for (const [route, name] of [
-    ['/', 'home'],
-    ['/calculator/', 'calculator'],
-  ] as const) {
-    await page.goto(route);
+  async function capture(name: string) {
     await page.evaluate(() => document.fonts.ready);
+    const report = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    const serious = report.violations.filter(
+      (violation) => violation.impact === 'serious' || violation.impact === 'critical',
+    );
+    expect(serious, `Axe serious or critical violations in captured state: ${name}`).toEqual([]);
     await page.screenshot({
       path: path.join(directory, `${name}-${testInfo.project.name}.png`),
       fullPage: true,
+      animations: 'disabled',
     });
   }
+  const screens = [
+    ['/', 'home'],
+    ['/apply/', 'apply-step-1'],
+    ['/calculator/', 'calculator'],
+    ['/double-charge/', 'double-charge-empty'],
+    ['/faq/', 'faq'],
+    ['/about/', 'about'],
+    [merchantRoute, 'result-listed'],
+    ['/check/canva/', 'result-unlisted'],
+  ] as const;
+  for (const [route, name] of screens) {
+    await page.goto(route);
+    await capture(name);
+  }
+  await page.goto('/');
+  await page.getByRole('combobox', { name: 'Service or merchant' }).fill('amazon');
+  await capture('search-multiple-entities');
+  await page.getByRole('combobox', { name: 'Service or merchant' }).fill('zzzzunknownserviceqxp');
+  await capture('search-no-match');
+  await page.goto('/apply/');
+  await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await capture('apply-step-2');
+  await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await capture('apply-step-3');
+  await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+  await page.getByRole('button', { name: 'See my result' }).click();
+  await capture('apply-outcome-applies');
+  await page.goto('/calculator/');
+  await page.getByLabel('Amount in Ghana cedis', { exact: true }).fill('120');
+  await page.getByRole('radio', { name: 'Price already includes tax', exact: true }).click();
+  await capture('calculator-inclusive');
+  await page.goto('/double-charge/');
+  await page.getByLabel('Merchant charged (GHS)', { exact: true }).fill('100');
+  await page.getByLabel('Statement shows (GHS)', { exact: true }).fill('120');
+  await page.getByRole('radio', { name: 'Yes, the receipt clearly shows Ghana tax' }).check();
+  await capture('double-charge-review');
+  await page.goto(merchantRoute);
+  await page.getByRole('button', { name: 'Share this result', exact: true }).click();
+  await capture('share-dialog');
+  await page.getByRole('button', { name: 'Close share dialog' }).click();
+  await page.goto('/calculator/');
+  await page.locator('#amount').fill('');
+  await capture('calculator-empty');
+  await page.locator('#amount').fill('-1');
+  await capture('calculator-invalid');
+  await page.goto('/double-charge/');
+  await page.locator('#merchant-amount').fill('-1');
+  await capture('double-charge-invalid');
+  await page.locator('#merchant-amount').fill('100');
+  await page.locator('#statement-amount').fill('90');
+  await capture('double-charge-lower');
+  await page.goto('/apply/');
+  await page.getByRole('radio', { name: 'I’m not sure', exact: true }).check();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+  await page.getByRole('button', { name: 'Next', exact: true }).click();
+  await page.getByRole('radio', { name: 'Yes', exact: true }).check();
+  await page.getByRole('button', { name: 'See my result' }).click();
+  await capture('apply-outcome-unclear');
+  await page.goto('/404/');
+  await capture('not-found');
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Switch to Twi', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'tw');
+  await capture('twi-home');
+  await page.goto('/calculator/');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'tw');
+  await capture('twi-calculator');
+  await page.goto(merchantRoute);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'tw');
+  await capture('twi-result');
+  await page.goto('/apply/');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'tw');
+  await capture('twi-apply-step-1');
+  for (let step = 0; step < 3; step++) {
+    await page.locator('input[value="yes"]').check();
+    await page.locator('.controls button').last().click();
+  }
+  await capture('twi-apply-outcome');
+  await page.goto('/double-charge/');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'tw');
+  await page.locator('#merchant-amount').fill('100');
+  await page.locator('#statement-amount').fill('120');
+  await page.locator('input[name="merchant-tax"]').first().check();
+  await capture('twi-double-charge');
+});
+
+test('eligibility can be completed and restarted using only the keyboard', async ({ page }) => {
+  await page.goto('/apply/');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  for (let step = 0; step < 3; step++) {
+    await expect(page.getByRole('radio', { name: 'Yes', exact: true })).toBeFocused();
+    await page.keyboard.press('Space');
+    await page.keyboard.press('Tab');
+    if (step > 0) await page.keyboard.press('Tab');
+    await expect(
+      page.getByRole('button', { name: step === 2 ? 'See my result' : 'Next', exact: true }),
+    ).toBeFocused();
+    await page.keyboard.press('Enter');
+    if (step < 2) await page.keyboard.press('Tab');
+  }
+  await expect(page.getByRole('heading', { name: 'VAT applies', exact: true })).toBeVisible();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: 'Start again', exact: true })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '1');
+  await expect(page.getByRole('button', { name: 'Next', exact: true })).toBeDisabled();
+});
+
+test('calculator mode and copy can be operated using only the keyboard', async ({ page }) => {
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.goto('/calculator/');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Tab');
+  await expect(page.getByLabel('Amount in Ghana cedis', { exact: true })).toBeFocused();
+  await page.keyboard.press('ControlOrMeta+A');
+  await page.keyboard.insertText('120');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('radio', { name: 'Tax added on top', exact: true })).toBeFocused();
+  await page.keyboard.press('ArrowRight');
+  await page.keyboard.press('Space');
+  await expect(
+    page.getByRole('radio', { name: 'Price already includes tax', exact: true }),
+  ).toBeChecked();
+  await expect(page.getByRole('row', { name: /Price before tax/ })).toContainText('100.00');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: 'Copy result', exact: true })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('button', { name: 'Copied', exact: true })).toBeVisible();
 });
