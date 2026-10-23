@@ -65,7 +65,10 @@ export default function MerchantSearch() {
                 results.length ? (i < 0 ? results.length - 1 : Math.max(0, i - 1)) : -1,
               );
             }
-            if (e.key === 'Escape') setOpen(false);
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              setOpen(false);
+            }
             if (e.key === 'Enter' && results.length) {
               e.preventDefault();
               if (ambiguous && active < 0) return;

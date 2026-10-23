@@ -6,6 +6,8 @@ Contributions should help people understand a payment without making stronger cl
 
 Use Node 20.19+ and pnpm 9.15.9. Install with `pnpm install --frozen-lockfile`, then run `pnpm dev`. Before opening a pull request, run `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and `pnpm test:e2e`. Install Playwright Chromium with `pnpm exec playwright install chromium`. UI changes should include a mobile screenshot and keyboard/accessibility verification. Run `pnpm lighthouse` for changes that affect loading or page structure.
 
+The browser suite uses port 4173 by default. Set `PLAYWRIGHT_PORT` to use a free port and `QA_OUTPUT_DIR` to choose a directory for the captured reference images. These are optional test settings; the exported app needs no environment variables.
+
 Keep changes focused. Write a clear problem statement, describe the resulting behavior, cite source evidence for tax claims, and report checks you actually ran. Do not report skipped checks as passing.
 
 ## Merchant corrections and aliases

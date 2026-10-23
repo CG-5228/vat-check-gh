@@ -29,8 +29,12 @@
   {
     "slug": "adobe",
     "legalName": "ADOBE SYSTEMS SOFTWARE IRELAND LIMITED",
-    "tradingNames": ["Adobe"],
-    "aliases": ["adobe"],
+    "tradingNames": [
+      "Adobe"
+    ],
+    "aliases": [
+      "adobe"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -48,7 +52,9 @@
     "slug": "airbnb-ireland-unlimited-company",
     "legalName": "AIRBNB IRELAND UNLIMITED COMPANY",
     "tradingNames": [],
-    "aliases": ["airbnb"],
+    "aliases": [
+      "airbnb"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -57,7 +63,10 @@
     "slug": "amazon-web-services-emea-sarl",
     "legalName": "AMAZON WEB SERVICES EMEA SARL",
     "tradingNames": [],
-    "aliases": ["amazon", "aws"],
+    "aliases": [
+      "amazon",
+      "aws"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -66,7 +75,10 @@
     "slug": "amazon-com-services-llc",
     "legalName": "AMAZON.COM SERVICES LLC",
     "tradingNames": [],
-    "aliases": ["amazon", "amazon prime"],
+    "aliases": [
+      "amazon",
+      "amazon prime"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -75,7 +87,10 @@
     "slug": "anthropic-pbc",
     "legalName": "ANTHROPIC, PBC",
     "tradingNames": [],
-    "aliases": ["anthropic", "claude"],
+    "aliases": [
+      "anthropic",
+      "claude"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -83,8 +98,15 @@
   {
     "slug": "apple",
     "legalName": "APPLE DISTRIBUTION INTERNATIONAL",
-    "tradingNames": ["Apple / iCloud"],
-    "aliases": ["apple", "icloud", "apple tv", "app store"],
+    "tradingNames": [
+      "Apple / iCloud"
+    ],
+    "aliases": [
+      "apple",
+      "icloud",
+      "apple tv",
+      "app store"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -120,7 +142,9 @@
     "slug": "audible-inc",
     "legalName": "AUDIBLE INC",
     "tradingNames": [],
-    "aliases": ["audible"],
+    "aliases": [
+      "audible"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -129,7 +153,9 @@
     "slug": "audible-limited",
     "legalName": "AUDIBLE LIMITED",
     "tradingNames": [],
-    "aliases": ["audible"],
+    "aliases": [
+      "audible"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -174,7 +200,9 @@
     "slug": "booking-com-b-v",
     "legalName": "BOOKING.COM B.V",
     "tradingNames": [],
-    "aliases": ["booking.com"],
+    "aliases": [
+      "booking.com"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -219,7 +247,9 @@
     "slug": "coursera-inc",
     "legalName": "COURSERA INC",
     "tradingNames": [],
-    "aliases": ["coursera"],
+    "aliases": [
+      "coursera"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -237,7 +267,9 @@
     "slug": "dstv-sales-pty",
     "legalName": "DSTV SALES PTY",
     "tradingNames": [],
-    "aliases": ["dstv"],
+    "aliases": [
+      "dstv"
+    ],
     "sourcePage": 1,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -255,7 +287,9 @@
     "slug": "etsy-ireland-uc",
     "legalName": "ETSY IRELAND UC",
     "tradingNames": [],
-    "aliases": ["etsy"],
+    "aliases": [
+      "etsy"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -327,7 +361,10 @@
     "slug": "google-cloud-emea-limited",
     "legalName": "GOOGLE CLOUD EMEA LIMITED",
     "tradingNames": [],
-    "aliases": ["google", "google cloud"],
+    "aliases": [
+      "google",
+      "google cloud"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -336,7 +373,11 @@
     "slug": "google-commerce-limited-ireland",
     "legalName": "GOOGLE COMMERCE LIMITED IRELAND",
     "tradingNames": [],
-    "aliases": ["google", "google one", "google play"],
+    "aliases": [
+      "google",
+      "google one",
+      "google play"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -408,7 +449,9 @@
     "slug": "linkedin-ireland-unlimited-company",
     "legalName": "LINKEDIN IRELAND UNLIMITED COMPANY",
     "tradingNames": [],
-    "aliases": ["linkedin"],
+    "aliases": [
+      "linkedin"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -462,7 +505,9 @@
     "slug": "meta-platforms-ireland-limited",
     "legalName": "META PLATFORMS IRELAND LIMITED",
     "tradingNames": [],
-    "aliases": ["meta"],
+    "aliases": [
+      "meta"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -471,7 +516,9 @@
     "slug": "meta-platforms-technologies-ireland-limited",
     "legalName": "META PLATFORMS TECHNOLOGIES IRELAND LIMITED",
     "tradingNames": [],
-    "aliases": ["meta"],
+    "aliases": [
+      "meta"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -480,7 +527,9 @@
     "slug": "microsoft-ireland-operations-limited",
     "legalName": "MICROSOFT IRELAND OPERATIONS LIMITED",
     "tradingNames": [],
-    "aliases": ["microsoft"],
+    "aliases": [
+      "microsoft"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -497,8 +546,12 @@
   {
     "slug": "netflix",
     "legalName": "NETFLIX INTERNATIONAL B.V.",
-    "tradingNames": ["Netflix"],
-    "aliases": ["netflix"],
+    "tradingNames": [
+      "Netflix"
+    ],
+    "aliases": [
+      "netflix"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -516,7 +569,9 @@
     "slug": "nordvpn-s-a",
     "legalName": "NORDVPN S.A.",
     "tradingNames": [],
-    "aliases": ["nordvpn"],
+    "aliases": [
+      "nordvpn"
+    ],
     "sourcePage": 2,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -533,8 +588,13 @@
   {
     "slug": "chatgpt",
     "legalName": "OPENAI OPCO, LLC",
-    "tradingNames": ["ChatGPT / OpenAI"],
-    "aliases": ["chatgpt", "openai"],
+    "tradingNames": [
+      "ChatGPT / OpenAI"
+    ],
+    "aliases": [
+      "chatgpt",
+      "openai"
+    ],
     "sourcePage": 3,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -623,8 +683,12 @@
   {
     "slug": "spotify",
     "legalName": "SPOTIFY AB",
-    "tradingNames": ["Spotify"],
-    "aliases": ["spotify"],
+    "tradingNames": [
+      "Spotify"
+    ],
+    "aliases": [
+      "spotify"
+    ],
     "sourcePage": 3,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -642,7 +706,9 @@
     "slug": "squarespace-ireland-limited",
     "legalName": "SQUARESPACE IRELAND LIMITED",
     "tradingNames": [],
-    "aliases": ["squarespace"],
+    "aliases": [
+      "squarespace"
+    ],
     "sourcePage": 3,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -714,7 +780,9 @@
     "slug": "tiktok-pte-ltd",
     "legalName": "TIKTOK PTE. LTD.",
     "tradingNames": [],
-    "aliases": ["tiktok"],
+    "aliases": [
+      "tiktok"
+    ],
     "sourcePage": 3,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -723,7 +791,9 @@
     "slug": "tinder-llc",
     "legalName": "TINDER LLC",
     "tradingNames": [],
-    "aliases": ["tinder"],
+    "aliases": [
+      "tinder"
+    ],
     "sourcePage": 3,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"
@@ -741,7 +811,9 @@
     "slug": "uber-bv",
     "legalName": "UBER BV",
     "tradingNames": [],
-    "aliases": ["uber"],
+    "aliases": [
+      "uber"
+    ],
     "sourcePage": 3,
     "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
     "sourceDate": "2026-09-25"

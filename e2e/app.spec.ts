@@ -15,6 +15,7 @@ const sourceDate = new Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
   timeZone: 'UTC',
 }).format(new Date(source.sourceDate));
+const qaDirectory = path.resolve(process.env.QA_OUTPUT_DIR ?? path.join('..', 'work', 'qa'));
 const first = merchants[0];
 if (!first) throw new Error('E2E needs the generated, nonempty official merchant data.');
 const merchantRoute = `/check/${first.slug}/`;
@@ -116,6 +117,8 @@ test('unmatched service explains the dated list without claiming an exemption', 
   await expect(page.locator('main')).toContainText(/not on|no match|couldn.t find/i);
   await expect(page.locator('main')).toContainText(/bank|MoMo|payment provider/i);
   await search.press('ArrowUp');
+  await expect(search).not.toHaveAttribute('aria-activedescendant', /.+/);
+  await search.press('ArrowDown');
   await expect(search).not.toHaveAttribute('aria-activedescendant', /.+/);
   await search.press('Enter');
   await expect(page).toHaveURL(/\/$/);
@@ -250,7 +253,7 @@ test('share dialog creates a local PNG and returns focus after closing', async (
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe('vat-check-gh-result.png');
   expect(await download.failure()).toBeNull();
-  const imageDirectory = path.resolve('..', 'work', 'qa');
+  const imageDirectory = qaDirectory;
   mkdirSync(imageDirectory, { recursive: true });
   await download.saveAs(path.join(imageDirectory, `share-image-${testInfo.project.name}.png`));
   await page.getByRole('button', { name: 'Close share dialog' }).click();
@@ -269,7 +272,15 @@ test('a client-navigated merchant page and search work offline after a hard relo
   await search.press('ArrowDown');
   await search.press('Enter');
   await expect(page).toHaveURL(new RegExp(`/check/${chosen.slug}/$`));
-  await page.waitForFunction(async () => Boolean(await caches.match(location.href)));
+  const documentUrl = new URL(`/check/${chosen.slug}/`, page.url()).href;
+  await expect
+    .poll(() =>
+      page.evaluate(async (url) => {
+        const response = await caches.match(url);
+        return response?.ok && response.headers.get('Content-Type')?.includes('text/html');
+      }, documentUrl),
+    )
+    .toBe(true);
   await context.setOffline(true);
   await page.reload();
   await expect(page.locator('main')).toContainText(chosen.legalName);
@@ -298,7 +309,7 @@ test('calculator switches inclusive mode and preserves an awkward entered total'
 
 test('capture every page and principal interaction state', async ({ page }, testInfo) => {
   test.setTimeout(120_000);
-  const directory = path.resolve('..', 'work', 'qa');
+  const directory = qaDirectory;
   mkdirSync(directory, { recursive: true });
   async function capture(name: string) {
     await page.evaluate(() => document.fonts.ready);
@@ -418,9 +429,19 @@ test('eligibility can be completed and restarted using only the keyboard', async
       page.getByRole('button', { name: step === 2 ? 'See my result' : 'Next', exact: true }),
     ).toBeFocused();
     await page.keyboard.press('Enter');
+    await expect(
+      page.locator('.instrument > div[tabindex="-1"][aria-live="polite"]'),
+    ).toBeFocused();
     if (step < 2) await page.keyboard.press('Tab');
   }
   await expect(page.getByRole('heading', { name: 'VAT applies', exact: true })).toBeVisible();
+  await page.keyboard.press('Tab');
+  await expect(
+    page
+      .locator('main')
+      .getByRole('link', { name: /GRA FAQ/ })
+      .first(),
+  ).toBeFocused();
   await page.keyboard.press('Tab');
   await expect(page.getByRole('button', { name: 'Start again', exact: true })).toBeFocused();
   await page.keyboard.press('Enter');
@@ -440,6 +461,9 @@ test('calculator mode and copy can be operated using only the keyboard', async (
   await page.keyboard.press('Tab');
   await expect(page.getByRole('radio', { name: 'Tax added on top', exact: true })).toBeFocused();
   await page.keyboard.press('ArrowRight');
+  await expect(
+    page.getByRole('radio', { name: 'Price already includes tax', exact: true }),
+  ).toBeFocused();
   await page.keyboard.press('Space');
   await expect(
     page.getByRole('radio', { name: 'Price already includes tax', exact: true }),
