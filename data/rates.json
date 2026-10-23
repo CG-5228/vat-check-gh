@@ -1,0 +1,14 @@
+{
+  "version": "2026-01",
+  "effectiveFrom": "2026-01-01",
+  "vat": 1500,
+  "nhil": 250,
+  "getfund": 250,
+  "method": "same-base-non-compounding",
+  "roundingRule": "half-up-to-pesewa-largest-remainder",
+  "rateUnit": "basis-points",
+  "sourceUrl": "https://gra.gov.gh/domestic-tax/tax-types/vat/",
+  "sourceReference": "VAT Reforms 2026: Simplified VAT Computation; Rates For VAT Computation; Sample Illustration",
+  "faqUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/RTVAT-Approved-FAQ.pdf",
+  "faqReference": "Q9, page 2"
+}

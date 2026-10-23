@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+work/
+*.tsbuildinfo
+playwright-report/
+test-results/
+.lighthouseci/
+.DS_Store
+*.zip

@@ -1,0 +1,67 @@
+name: Check official source freshness
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: official-source-freshness
+  cancel-in-progress: false
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Compare published PDF with committed checksum
+        id: freshness
+        shell: bash
+        run: |
+          set +e
+          pnpm data:check > source-check.txt 2>&1
+          result=$?
+          cat source-check.txt
+          echo "exit_code=$result" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Open or update a review issue
+        if: steps.freshness.outputs.exit_code != '0'
+        uses: actions/github-script@v7
+        env:
+          SOURCE_EXIT: ${{ steps.freshness.outputs.exit_code }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const report = fs.readFileSync('source-check.txt', 'utf8').slice(0, 16000);
+            const changed = process.env.SOURCE_EXIT === '2';
+            const title = changed
+              ? 'Official merchant PDF changed: review and refresh the dated data'
+              : 'Official merchant PDF check failed: investigate source availability';
+            const marker = changed ? '<!-- source-freshness:changed -->' : '<!-- source-freshness:error -->';
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = `${marker}\n\n${changed ? 'The source checksum differs. Review the official PDF, regenerate data, inspect aliases and update the source date before release.' : 'The official source could not be verified. This does not establish that its contents changed. Check the URL, network response and PDF validity.'}\n\n[Workflow report](${run})\n\n<details><summary>Check output</summary>\n\n\`\`\`text\n${report.replaceAll('```', '~~~')}\n\`\`\`\n</details>`;
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              ...context.repo, state: 'open', per_page: 100
+            });
+            const existing = issues.find(issue => !issue.pull_request && issue.body?.includes(marker));
+            if (existing) {
+              await github.rest.issues.update({...context.repo, issue_number: existing.number, body});
+            } else {
+              await github.rest.issues.create({...context.repo, title, body});
+            }
+      - name: Mark unresolved check unsuccessful
+        if: steps.freshness.outputs.exit_code != '0'
+        run: exit 1
