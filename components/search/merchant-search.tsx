@@ -2,13 +2,13 @@
 import { useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useLanguage } from '@/lib/i18n';
+import { useLanguage, TranslatedText } from '@/lib/i18n';
 import { searchMerchants, popularMerchants } from '@/lib/merchants';
 import { resolveAlias } from '@/lib/aliases';
 import { MERCHANT_ISSUE_URL } from '@/lib/seo';
 import { Source } from '@/components/ui/source';
 export default function MerchantSearch() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
@@ -36,12 +36,13 @@ export default function MerchantSearch() {
   return (
     <div className="search-area">
       <label className="sr-only" htmlFor={id}>
-        {t.searchLabel}
+        <TranslatedText id="searchLabel" />
       </label>
       <div className="search-field">
         <input
           id={id}
           type="search"
+          lang={locale}
           autoComplete="off"
           placeholder={t.searchPlaceholder}
           value={query}
@@ -114,8 +115,12 @@ export default function MerchantSearch() {
           </div>
           {!results.length && (
             <div className="no-results" role="status">
-              <h2>{t.noMatch}</h2>
-              <p>{t.noMatchText}</p>
+              <h2>
+                <TranslatedText id="noMatch" />
+              </h2>
+              <p>
+                <TranslatedText id="noMatchText" />
+              </p>
               <Source questions="13–16" />
               {query.trim().toLowerCase() === 'canva' && (
                 <Link href="/check/canva/">View the Canva result</Link>

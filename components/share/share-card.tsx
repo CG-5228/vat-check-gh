@@ -1,7 +1,7 @@
 'use client';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useState } from 'react';
-import { useLanguage } from '@/lib/i18n';
+import { useLanguage, TranslatedText } from '@/lib/i18n';
 import { sourceDateLabel } from '@/lib/source';
 export default function ShareCard({
   name,
@@ -10,7 +10,7 @@ export default function ShareCard({
   name: string;
   registered?: boolean;
 }) {
-  const { t } = useLanguage();
+  const { locale } = useLanguage();
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   async function makeCard() {
@@ -105,7 +105,9 @@ export default function ShareCard({
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="button button-light">{t.share}</button>
+        <button className="button button-light" lang={locale}>
+          <TranslatedText id="share" />
+        </button>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />

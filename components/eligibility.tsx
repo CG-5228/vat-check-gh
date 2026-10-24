@@ -2,7 +2,7 @@
 import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { getEligibility, type EligibilityAnswers } from '@/lib/eligibility';
-import { useLanguage } from '@/lib/i18n';
+import { useLanguage, TranslatedText } from '@/lib/i18n';
 import { Source } from './ui/source';
 const questions = [
   {
@@ -51,16 +51,18 @@ export default function Eligibility() {
   }
   return (
     <div className="instrument">
-      <h1 className="sr-only">{t.checkTitle}</h1>
+      <h1 className="sr-only">
+        <TranslatedText id="checkTitle" />
+      </h1>
       <div ref={focusTarget} tabIndex={-1} aria-live="polite">
         {!finished ? (
           <>
             <fieldset className="field" aria-describedby="question-help">
-              <legend className="field-label" id="question-title">
+              <legend className="field-label" id="question-title" lang={locale}>
                 {locale === 'tw' ? q.tw : q.title}
               </legend>
               {(['yes', 'no', 'unsure'] as const).map((value) => (
-                <label className="choice" key={value}>
+                <label className="choice" key={value} lang={locale}>
                   <input
                     type="radio"
                     name={q.key}
@@ -101,7 +103,7 @@ export default function Eligibility() {
               {q.help}
             </p>
             {!selected[step] && (
-              <p className="help">
+              <p className="help" lang={locale}>
                 {locale === 'tw'
                   ? 'Paw mmuaeɛ bi na kɔ anim.'
                   : 'Choose an answer to continue. “I’m not sure” is a valid answer.'}
@@ -116,10 +118,11 @@ export default function Eligibility() {
                   focusQuestion();
                 }}
               >
-                {t.back}
+                <TranslatedText id="back" />
               </button>
               <button
                 className="button"
+                lang={locale}
                 disabled={!selected[step]}
                 onClick={() => {
                   if (step === 2) setFinished(true);
@@ -136,7 +139,10 @@ export default function Eligibility() {
           </>
         ) : (
           <>
-            <h2 className={`result-figure${outcome.result === 'applies' ? ' vat-applies' : ''}`}>
+            <h2
+              lang={locale}
+              className={`result-figure${outcome.result === 'applies' ? ' vat-applies' : ''}`}
+            >
               {titles[outcome.result]}
             </h2>
             <p>{outcome.reason}</p>
@@ -157,9 +163,9 @@ export default function Eligibility() {
                   focusQuestion();
                 }}
               >
-                {t.restart}
+                <TranslatedText id="restart" />
               </button>
-              <Link className="button" href="/calculator/">
+              <Link className="button" href="/calculator/" lang={locale}>
                 {locale === 'tw' ? t.calculator : 'Estimate the tax'}
               </Link>
             </div>

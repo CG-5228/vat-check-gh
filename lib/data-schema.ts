@@ -36,6 +36,7 @@ export const rateConfigSchema = z
   .object({
     version: z.string(),
     effectiveFrom: isoDate,
+    reviewedAt: isoDate,
     vat: z.number().int().nonnegative(),
     nhil: z.number().int().nonnegative(),
     getfund: z.number().int().nonnegative(),

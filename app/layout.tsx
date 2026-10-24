@@ -21,7 +21,7 @@ export const viewport: Viewport = { width: 'device-width', initialScale: 1, them
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body lang="en">
         <LanguageProvider>
           <a className="skip-link" href="#main">
             Skip to content

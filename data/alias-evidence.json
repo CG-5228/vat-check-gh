@@ -1,0 +1,300 @@
+{
+  "netflix": {
+    "legalNames": ["NETFLIX INTERNATIONAL B.V."],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "chatgpt": {
+    "legalNames": ["OPENAI OPCO, LLC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=3",
+      "https://openai.com/policies/terms-of-use/"
+    ],
+    "basis": "product-association",
+    "note": "The individual ChatGPT terms identify OpenAI OpCo, LLC; other regional or business contracts may differ."
+  },
+  "openai": {
+    "legalNames": ["OPENAI OPCO, LLC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=3"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "spotify": {
+    "legalNames": ["SPOTIFY AB"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=3"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "apple": {
+    "legalNames": ["APPLE DISTRIBUTION INTERNATIONAL"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "icloud": {
+    "legalNames": ["APPLE DISTRIBUTION INTERNATIONAL"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1",
+      "https://www.apple.com/legal/internet-services/icloud/en/terms.html"
+    ],
+    "basis": "product-association",
+    "note": "The iCloud definition of Apple includes Apple Distribution International Ltd. for other users, after its separately listed regions."
+  },
+  "apple tv": {
+    "legalNames": ["APPLE DISTRIBUTION INTERNATIONAL"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1",
+      "https://www.apple.com/legal/internet-services/itunes/gh/terms.html"
+    ],
+    "basis": "product-association",
+    "note": "Apple Media Services lists Apple TV and defines the relevant Apple entity by home country."
+  },
+  "app store": {
+    "legalNames": ["APPLE DISTRIBUTION INTERNATIONAL"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1",
+      "https://www.apple.com/legal/internet-services/itunes/gh/terms.html"
+    ],
+    "basis": "product-association",
+    "note": "Apple Media Services includes App Store; the merchant of record can depend on the content and account region."
+  },
+  "adobe": {
+    "legalNames": ["ADOBE SYSTEMS SOFTWARE IRELAND LIMITED"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "airbnb": {
+    "legalNames": ["AIRBNB IRELAND UNLIMITED COMPANY"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "amazon": {
+    "legalNames": ["AMAZON WEB SERVICES EMEA SARL", "AMAZON.COM SERVICES LLC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "amazon prime": {
+    "legalNames": ["AMAZON.COM SERVICES LLC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1",
+      "https://www.primevideo.com/help?language=en_US&nodeId=202064890"
+    ],
+    "basis": "product-association",
+    "note": "Prime Video identifies Amazon.com Services LLC for the United States and remaining countries; this is a possible listed Prime Video supplier, not every Amazon Prime service."
+  },
+  "aws": {
+    "legalNames": ["AMAZON WEB SERVICES EMEA SARL"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1",
+      "https://aws.amazon.com/legal/aws-emea/",
+      "https://aws.amazon.com/legal/aws-emea-countries/"
+    ],
+    "basis": "product-association",
+    "note": "AWS identifies Amazon Web Services EMEA SARL and includes Ghana in its country list; account tax address governs the applicable party."
+  },
+  "anthropic": {
+    "legalNames": ["ANTHROPIC, PBC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "claude": {
+    "legalNames": ["ANTHROPIC, PBC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1",
+      "https://www.anthropic.com/company"
+    ],
+    "basis": "product-association",
+    "note": "Anthropic identifies itself as a public benefit corporation and Claude as its product. This links the brand to a listed company, not a guarantee of the contractual seller for every region or plan."
+  },
+  "audible": {
+    "legalNames": ["AUDIBLE INC", "AUDIBLE LIMITED"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "booking.com": {
+    "legalNames": ["BOOKING.COM B.V"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "coursera": {
+    "legalNames": ["COURSERA INC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "dstv": {
+    "legalNames": ["DSTV SALES PTY"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=1"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "etsy": {
+    "legalNames": ["ETSY IRELAND UC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "google": {
+    "legalNames": ["GOOGLE CLOUD EMEA LIMITED", "GOOGLE COMMERCE LIMITED IRELAND"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "google cloud": {
+    "legalNames": ["GOOGLE CLOUD EMEA LIMITED"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "google one": {
+    "legalNames": ["GOOGLE COMMERCE LIMITED IRELAND"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2",
+      "https://one.google.com/terms-of-service"
+    ],
+    "basis": "product-association",
+    "note": "Google One terms identify Google Commerce Limited for Google Play purchases by consumers in Europe, the Middle East and Africa; third-party purchases can have another seller."
+  },
+  "google play": {
+    "legalNames": ["GOOGLE COMMERCE LIMITED IRELAND"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2",
+      "https://one.google.com/terms-of-service"
+    ],
+    "basis": "product-association",
+    "note": "Google One terms identify Google Commerce Limited as the Google Play seller for the described purchases in Europe, the Middle East and Africa. Other content and billing channels can differ."
+  },
+  "linkedin": {
+    "legalNames": ["LINKEDIN IRELAND UNLIMITED COMPANY"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "meta": {
+    "legalNames": ["META PLATFORMS IRELAND LIMITED", "META PLATFORMS TECHNOLOGIES IRELAND LIMITED"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "microsoft": {
+    "legalNames": ["MICROSOFT IRELAND OPERATIONS LIMITED"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "nordvpn": {
+    "legalNames": ["NORDVPN S.A."],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=2"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "squarespace": {
+    "legalNames": ["SQUARESPACE IRELAND LIMITED"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=3"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "tiktok": {
+    "legalNames": ["TIKTOK PTE. LTD."],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=3"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "tinder": {
+    "legalNames": ["TINDER LLC"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=3"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  },
+  "uber": {
+    "legalNames": ["UBER BV"],
+    "reviewedAt": "2026-10-24",
+    "sourceUrls": [
+      "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf#page=3"
+    ],
+    "basis": "legal-name-search-label",
+    "note": "Search label derived from the listed legal name; it does not certify the seller or tax treatment of an individual purchase."
+  }
+}

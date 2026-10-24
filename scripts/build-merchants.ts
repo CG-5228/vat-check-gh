@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateAliasEvidence } from '../lib/alias-provenance';
 import {
   aliasesSchema,
   merchantsSchema,
@@ -14,6 +15,8 @@ export const MERCHANTS_URL =
 export const FAQ_URL = 'https://gra.gov.gh/wp-content/uploads/2026/10/RTVAT-Approved-FAQ.pdf';
 // ASSUMPTION: this PDF has no printed revision date. Use the official filename's 25.9.2026 date, not download time.
 const SOURCE_DATE = '2026-09-25';
+// Deliberate human review date. A download alone must not claim fresh tax-guidance review.
+const GUIDANCE_VERIFIED_AT = '2026-10-24';
 export interface PdfLine {
   page: number;
   text: string;
@@ -148,6 +151,10 @@ async function main(): Promise<void> {
   const aliasMap = aliasesSchema.parse(
     JSON.parse(await readFile(resolve(root, 'data/aliases.json'), 'utf8')),
   );
+  validateAliasEvidence(
+    aliasMap,
+    JSON.parse(await readFile(resolve(root, 'data/alias-evidence.json'), 'utf8')),
+  );
   let previousCount = 92;
   try {
     previousCount = (
@@ -189,7 +196,7 @@ async function main(): Promise<void> {
     merchantCount: merchants.length,
     faqUrl: FAQ_URL,
     faqVersion: 'RTVAT Approved FAQ, undated, October 2026 upload path, 3 pages',
-    verifiedAt: '2026-10-23',
+    verifiedAt: GUIDANCE_VERIFIED_AT,
     ratesUrl: 'https://gra.gov.gh/domestic-tax/tax-types/vat/',
     kpmgUrl:
       'https://kpmg.com/us/en/taxnewsflash/news/2026/10/tnf-ghana-real-time-vat-collection-on-cross-border-digital-services.html',

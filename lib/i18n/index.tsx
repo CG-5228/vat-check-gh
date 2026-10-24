@@ -118,11 +118,19 @@ const Context = createContext({
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>('en');
   useEffect(() => {
-    if (localStorage.getItem('vat-language') === 'tw') setLocale('tw');
+    try {
+      if (localStorage.getItem('vat-language') === 'tw') setLocale('tw');
+    } catch {
+      // Preference storage can be disabled. Keep the session usable in English.
+    }
   }, []);
   useEffect(() => {
     document.documentElement.lang = locale === 'tw' ? 'tw' : 'en';
-    localStorage.setItem('vat-language', locale);
+    try {
+      localStorage.setItem('vat-language', locale);
+    } catch {
+      // The selected language still works for this session without persistence.
+    }
   }, [locale]);
   return (
     <Context.Provider value={{ locale, t: locale === 'en' ? en : tw, setLocale }}>
@@ -131,3 +139,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   );
 }
 export const useLanguage = () => useContext(Context);
+
+/** Scope supplied translations separately from the English guidance fallback. */
+export function TranslatedText({ id }: { id: keyof typeof en }) {
+  const { locale, t } = useLanguage();
+  return <span lang={locale === 'tw' && tw[id] !== en[id] ? 'tw' : 'en'}>{t[id]}</span>;
+}

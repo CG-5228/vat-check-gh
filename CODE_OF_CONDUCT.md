@@ -6,6 +6,6 @@ Harassment, threats, discrimination, sexualized attention, personal attacks, and
 
 Maintainers may remove harmful content, ask participants to change their behavior, or limit participation. Responses should be proportionate to the conduct and its impact. People involved should have an opportunity to explain their perspective when it is safe and appropriate.
 
-To report a concern, use the repository’s private reporting channel or contact a maintainer through the contact information shown on their profile. Do not publish sensitive details in a public issue. The project has not yet designated a separate conduct email address; maintainers should add one before inviting a wider community.
+For abuse or threats, use [GitHub’s private abuse-reporting process](https://docs.github.com/en/communities/maintaining-your-safety-on-github/reporting-abuse-or-spam). For a project moderation concern, open an issue requesting a private contact from [the maintainer](https://github.com/KingEmma7), without naming other participants or sharing sensitive details. Do not publish private information in an issue.
 
 This policy applies in the project’s repositories, discussions and other project spaces, and when someone represents the project publicly.

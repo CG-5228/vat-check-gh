@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { validateAliasEvidence } from '../lib/alias-provenance';
 import {
   aliasesSchema,
   merchantsSchema,
@@ -14,6 +15,7 @@ async function json(name: string): Promise<unknown> {
 async function main(): Promise<void> {
   const merchants = merchantsSchema.parse(await json('merchants.json'));
   const aliases = aliasesSchema.parse(await json('aliases.json'));
+  validateAliasEvidence(aliases, await json('alias-evidence.json'));
   const rates = rateConfigSchema.parse(await json('rates.json'));
   const meta = sourceMetaSchema.parse(await json('source-meta.json'));
   if (meta.merchantCount !== merchants.length)

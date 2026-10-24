@@ -1,0 +1,2 @@
+# Preserve the formatting of generated upstream licence notices.
+public/THIRD_PARTY_NOTICES.txt -whitespace

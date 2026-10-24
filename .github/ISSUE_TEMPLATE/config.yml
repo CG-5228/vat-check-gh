@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/KingEmma7/vat-check-gh/security/advisories/new
+    about: Do not disclose exploits or private financial data in public issues.

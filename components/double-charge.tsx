@@ -4,9 +4,9 @@ import { assessCharge, complaintMessage } from '@/lib/double-charge';
 import { parseMoney, formatMoney, pesewas } from '@/lib/money';
 import MoneyFigure from '@/components/ui/money-figure';
 import { Source } from './ui/source';
-import { useLanguage } from '@/lib/i18n';
+import { useLanguage, TranslatedText } from '@/lib/i18n';
 export default function DoubleCharge() {
-  const { t, locale } = useLanguage();
+  const { locale } = useLanguage();
   const [merchant, setMerchant] = useState('');
   const [statement, setStatement] = useState('');
   const [included, setIncluded] = useState<boolean | 'unknown'>('unknown');
@@ -55,7 +55,9 @@ export default function DoubleCharge() {
   }
   return (
     <div className="instrument">
-      <h1 className="sr-only">{t.doubleCharge}</h1>
+      <h1 className="sr-only">
+        <TranslatedText id="doubleCharge" />
+      </h1>
       <div className="field">
         <label className="field-label" htmlFor="merchant-amount">
           Merchant charged (GHS)
@@ -142,7 +144,7 @@ export default function DoubleCharge() {
               />
             </p>
             <p>Difference between receipt and statement</p>
-            <h2>{locale === 'tw' ? twiTitles[result.verdict] : result.title}</h2>
+            <h2 lang={locale}>{locale === 'tw' ? twiTitles[result.verdict] : result.title}</h2>
             <p>{result.explanation}</p>
             <table className="receipt-table">
               <caption className="sr-only">Charge comparison in Ghana cedis</caption>
@@ -166,7 +168,7 @@ export default function DoubleCharge() {
             </p>
           </>
         ) : (
-          <p className="notice">
+          <p className="notice" lang={locale}>
             {locale === 'tw'
               ? 'Kyerɛw GHS sika mmienu no na yɛntoto ho.'
               : 'Enter both GHS amounts to compare the charge. Your entries stay in this browser.'}

@@ -69,16 +69,7 @@ await writeFile(
 await copyFile('out/_headers', 'public/_headers');
 const og = files.find((f) => /^out\/opengraph-image(?:\.png)?$/.test(f));
 if (og && og !== 'out/opengraph-image.png') await copyFile(og, 'out/opengraph-image.png');
-await writeFile(
-  'out/sw.js',
-  `const CACHE='vat-check-gh-${createHash('sha256')
-    .update(await readFile('out/index.html'))
-    .digest('hex')
-    .slice(
-      0,
-      12,
-    )}';self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('activate',event=>event.waitUntil(Promise.all([self.clients.claim(),caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))])));self.addEventListener('message',event=>{if(event.data?.type==='CACHE_VISIT')event.waitUntil(caches.open(CACHE).then(cache=>Promise.all(event.data.urls.filter(u=>new URL(u).origin===self.location.origin).map(u=>cache.add(u).catch(()=>{})))))});self.addEventListener('fetch',event=>{if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;event.respondWith(fetch(event.request).then(response=>{if(response.ok){const clone=response.clone();event.waitUntil(caches.open(CACHE).then(cache=>cache.put(event.request,clone)))}return response;}).catch(()=>caches.match(event.request).then(response=>response||new Response('This page has not been saved offline yet. Reconnect to visit it.',{status:503,headers:{'Content-Type':'text/plain'}}))))});`,
-);
+
 console.log(
   `Static export ready: ${files.filter((f) => f.endsWith('.html')).length} HTML pages, per-page script hashes, same-origin offline cache.`,
 );
@@ -146,4 +137,51 @@ for (const item of [
   const response = new ImageResponse(element, { width: 1200, height: 630, fonts });
   await writeFile(`out/check/${item.slug}/og.png`, Buffer.from(await response.arrayBuffer()));
 }
-console.log('Generated 93 merchant Open Graph images.');
+console.log(`Generated ${merchants.length + 1} merchant Open Graph images.`);
+
+// Keep a complete static app revision together. New workers wait for old tabs to
+// close; a cache-first release cannot combine old scripts with newly published HTML.
+const offlineFiles = (await walk('out'))
+  .filter((file) => /\.(?:html|txt|js|css|woff2?|svg)$/.test(file) && !file.endsWith('/sw.js'))
+  .sort();
+const releaseHash = createHash('sha256').update('vat-worker-policy-v2');
+for (const file of offlineFiles) releaseHash.update(file).update(await readFile(file));
+const release = releaseHash.digest('hex').slice(0, 20);
+const offlineUrls = offlineFiles.map((file) => '/' + file.slice(4).replace(/index\.html$/, ''));
+await writeFile(
+  'out/sw.js',
+  `
+const PREFIX = 'vat-check-gh-';
+const CACHE = PREFIX + '${release}';
+const FILES = ${JSON.stringify(offlineUrls)};
+const PATHS = new Set(FILES);
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)).catch(async error => {
+    await caches.delete(CACHE);
+    throw error;
+  }));
+});
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(
+    keys.filter(key => key.startsWith(PREFIX) && key !== CACHE).map(key => caches.delete(key))
+  )).then(() => self.clients.claim()));
+});
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
+  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+  event.respondWith((async () => {
+    if (PATHS.has(url.pathname)) {
+      const cache = await caches.open(CACHE);
+      const saved = await cache.match(new URL(url.pathname, self.location.origin).href);
+      if (saved) return saved;
+    }
+    try { return await fetch(request); }
+    catch { return new Response('This resource is not available offline. Reconnect to load it.', {
+      status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+    }); }
+  })());
+});
+`,
+);
+console.log(`Offline release ${release}: ${offlineUrls.length} static resources, staged updates.`);

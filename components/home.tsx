@@ -9,7 +9,7 @@ export default function Home() {
       <h1 className="sr-only">Check Ghana digital VAT for a service</h1>
       <MerchantSearch />
       <div className="empty-state">
-        <p>
+        <p lang={locale}>
           {locale === 'tw'
             ? 'Hwehwɛ dwumadie bi anaa adetɔnfoɔ din.'
             : 'Search a service or the seller on your receipt.'}

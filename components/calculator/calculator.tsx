@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { useLanguage } from '@/lib/i18n';
+import { useLanguage, TranslatedText } from '@/lib/i18n';
 import { parseMoney, formatMoney } from '@/lib/money';
 import { calculateTax } from '@/lib/tax';
 import { ratesEffectiveLabel } from '@/lib/source';
@@ -31,14 +31,17 @@ export default function Calculator() {
   }
   return (
     <div className="instrument">
-      <h1 className="sr-only">{t.calculator}</h1>
+      <h1 className="sr-only">
+        <TranslatedText id="calculator" />
+      </h1>
       <div className="field">
         <label className="field-label" htmlFor="amount">
-          {t.amount}
+          <TranslatedText id="amount" />
         </label>
         <input
           className="input"
           id="amount"
+          lang={locale}
           inputMode="decimal"
           autoComplete="off"
           value={amount}
@@ -67,15 +70,15 @@ export default function Calculator() {
         className="mode-toggle"
         aria-label="How tax is included"
       >
-        <ToggleGroup.Item className="button button-light" value="exclusive">
-          {t.exclusive}
+        <ToggleGroup.Item lang={locale} className="button button-light" value="exclusive">
+          <TranslatedText id="exclusive" />
         </ToggleGroup.Item>
-        <ToggleGroup.Item className="button button-light" value="inclusive">
-          {t.inclusive}
+        <ToggleGroup.Item lang={locale} className="button button-light" value="inclusive">
+          <TranslatedText id="inclusive" />
         </ToggleGroup.Item>
       </ToggleGroup.Root>
       <p id="amount-help" className="help">
-        {t.calcNote} Maximum GH₵1,000,000.00.
+        <TranslatedText id="calcNote" /> Maximum GH₵1,000,000.00.
       </p>
       <section aria-live="polite" aria-atomic="true">
         {result ? (
@@ -83,7 +86,9 @@ export default function Calculator() {
             <p className="result-figure">
               <MoneyFigure amount={result.total} />
             </p>
-            <p>{t.total}</p>
+            <p>
+              <TranslatedText id="total" />
+            </p>
             <table className="receipt-table">
               <caption className="sr-only">Tax breakdown in Ghana cedis</caption>
               <tbody>
@@ -92,7 +97,9 @@ export default function Calculator() {
                   <td>20%</td>
                 </tr>
                 <tr>
-                  <th scope="row">{t.base}</th>
+                  <th scope="row">
+                    <TranslatedText id="base" />
+                  </th>
                   <td>{formatMoney(result.base)}</td>
                 </tr>
                 <tr>
@@ -108,18 +115,22 @@ export default function Calculator() {
                   <td>{formatMoney(result.getfund)}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{t.tax}</th>
+                  <th scope="row">
+                    <TranslatedText id="tax" />
+                  </th>
                   <td>{formatMoney(result.totalTax)}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{t.total}</th>
+                  <th scope="row">
+                    <TranslatedText id="total" />
+                  </th>
                   <td>{formatMoney(result.total)}</td>
                 </tr>
               </tbody>
             </table>
           </>
         ) : (
-          <p className="notice">
+          <p className="notice" lang={locale}>
             {locale === 'tw'
               ? 'Kyerɛw sika a ɛfata na woahu akontabuo no.'
               : 'Enter a valid amount to see your estimate.'}
@@ -130,6 +141,7 @@ export default function Calculator() {
         <div className="controls">
           <button
             className="button"
+            lang={locale}
             disabled={copying}
             onClick={() => {
               void copy();

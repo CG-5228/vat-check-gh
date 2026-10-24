@@ -1,0 +1,12 @@
+# Generated dependency, data, build and verification outputs.
+pnpm-lock.yaml
+data/merchants.json
+public/THIRD_PARTY_NOTICES.txt
+node_modules/
+out/
+.next/
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+work/

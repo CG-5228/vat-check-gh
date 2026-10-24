@@ -1,7 +1,10 @@
 'use client';
-import { useLanguage } from '@/lib/i18n';
+import { TranslatedText } from '@/lib/i18n';
 
 export default function ResultMeaning() {
-  const { t } = useLanguage();
-  return <p>{t.registeredMeaning}</p>;
+  return (
+    <p>
+      <TranslatedText id="registeredMeaning" />
+    </p>
+  );
 }

@@ -1,12 +1,12 @@
 {
   "merchantsPdfUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
   "merchantsPdfSha256": "9e7602521251b6dc7dd38e696ec24182544402975d8eb9273418f42159850eb3",
-  "extractedAt": "2026-10-23T15:30:58.082Z",
+  "extractedAt": "2026-10-24T09:48:48.888Z",
   "sourceDate": "2026-09-25",
   "merchantCount": 92,
   "faqUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/RTVAT-Approved-FAQ.pdf",
   "faqVersion": "RTVAT Approved FAQ, undated, October 2026 upload path, 3 pages",
-  "verifiedAt": "2026-10-23",
+  "verifiedAt": "2026-10-24",
   "ratesUrl": "https://gra.gov.gh/domestic-tax/tax-types/vat/",
   "kpmgUrl": "https://kpmg.com/us/en/taxnewsflash/news/2026/10/tnf-ghana-real-time-vat-collection-on-cross-border-digital-services.html"
 }

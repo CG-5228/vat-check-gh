@@ -318,7 +318,7 @@ textarea:focus-visible {
   color: var(--ink);
   line-height: 1.7;
   padding-block: 8px;
-  min-height: 40px;
+  min-height: 48px;
   vertical-align: middle;
 }
 .source-stack {
@@ -897,4 +897,18 @@ fieldset {
 }
 .mono {
   font-family: inherit;
+}
+
+/* Keep source and navigation actions usable as touch targets. */
+.language,
+.text-button,
+.footer nav a {
+  min-width: 48px;
+}
+main a:not(.button),
+.footer p a {
+  display: inline-block;
+  min-height: 48px;
+  min-width: 48px;
+  padding-block: 12px;
 }

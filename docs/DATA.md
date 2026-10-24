@@ -11,7 +11,8 @@ The committed dataset contains 92 active registered digital service providers ex
 3. If working without network access, run `pnpm data:build --pdf data/sources/merchants.pdf` to regenerate from the committed source. This does not check whether GRA has changed its website.
 4. Review the JSON diff and visually compare ten randomly chosen rows with the original PDF, including every changed alias. Run `pnpm test`, `pnpm typecheck`, `pnpm lint` and `pnpm build`.
 5. If GRA publishes a new filename or dated version, update `MERCHANTS_URL` and `SOURCE_DATE` in `scripts/build-merchants.ts`, review the baseline, regenerate and update the release date.
-6. Submit all changes together in a PR. Re-run data:build and update the data date before each release.
+6. After actually reviewing the current FAQ and rate guidance, update `GUIDANCE_VERIFIED_AT` in the generator and `reviewedAt` in `data/rates.json`. Downloading the merchant PDF alone does not establish a new tax-guidance review date.
+7. Submit all changes together in a PR. Re-run data:build and update the data date before each release.
 
 A moved URL, HTTP failure, HTML response, redirect or changed final URL (including on the same domain), missing column headers, missing row numbers, malformed TIN, duplicate row/TIN/name, or extraction count falling below 85% of the previous count fails loudly. The initial minimum is 70 rows against the reviewed 92-row baseline. A change in official layout requires human review rather than relaxing validation automatically. Continuation lines are joined only to the previous row on the same page.
 
@@ -20,6 +21,8 @@ A moved URL, HTTP failure, HTML response, redirect or changed final URL (includi
 ## Aliases
 
 `data/aliases.json` is a hand-reviewed map from brand labels to arrays of exact legal names in the PDF. Never map to an absent entity. Arrays preserve ambiguity, for example Google, Amazon and Audible. Search shows all matching entities so the user can compare the name on their receipt. Product aliases identify a possible listed supplier, not a guarantee that every payment for that brand is supplied by that entity or is a taxable digital service. The actual receipt takes precedence. Netflix, ChatGPT/OpenAI and Spotify are present in the reviewed source. Canva is absent; no alias or fabricated registered page is created.
+
+Every alias also requires a matching dated record in `data/alias-evidence.json`; both `data:build` and the production validation step reject missing evidence, changed targets and product associations supported only by the legal-name list. The validator checks record completeness, not whether a web page proves a claim. Maintainers must read the primary sources and retain their scope. See [ALIASES.md](ALIASES.md).
 
 Only recognizable labels are used. Do not infer a company country from its legal suffix, correct apparent source misspellings, treat registration as proof that a particular transaction qualifies, or infer tax inclusion from registration.
 

@@ -1,6 +1,7 @@
 {
   "version": "2026-01",
   "effectiveFrom": "2026-01-01",
+  "reviewedAt": "2026-10-24",
   "vat": 1500,
   "nhil": 250,
   "getfund": 250,
