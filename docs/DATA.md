@@ -6,7 +6,7 @@ The committed dataset contains 92 active registered digital service providers ex
 
 ## Refresh
 
-1. Install Node 22.13 or newer in a supported even-numbered release (Node 24 recommended) and pnpm 9.15.9, then run `pnpm install --frozen-lockfile`.
+1. Install Node 22.19 or newer in a supported even-numbered release (Node 24 recommended) and pnpm 9.15.9, then run `pnpm install --frozen-lockfile`.
 2. Run `pnpm data:build`. This downloads the official source over HTTPS, extracts its text with pdfjs-dist and validates every row and alias before replacing generated files. Expected current output: `Generated 92 merchants from 2026-09-25` plus the SHA-256.
 3. If working without network access, run `pnpm data:build --pdf data/sources/merchants.pdf` to regenerate from the committed source. This does not check whether GRA has changed its website.
 4. Review the JSON diff and visually compare ten randomly chosen rows with the original PDF, including every changed alias. Run `pnpm test`, `pnpm typecheck`, `pnpm lint` and `pnpm build`.
