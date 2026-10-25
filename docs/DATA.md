@@ -62,10 +62,11 @@ Suppose the fictional PDF renames an existing registrant on page 2 and adds a 93
 +++ b/data/merchants.json
 @@ -120,8 +120,8 @@
    {
-     "slug": "example-streaming",
+-    "slug": "example-streaming-b-v",
 -    "legalName": "EXAMPLE STREAMING B.V.",
++    "slug": "example-streaming-europe-b-v",
 +    "legalName": "EXAMPLE STREAMING EUROPE B.V.",
-     "tradingNames": ["Example Streaming"],
+     "tradingNames": [],
      "aliases": ["example streaming", "exampleplus"],
      "sourcePage": 2,
      "sourceUrl": "https://gra.gov.gh/wp-content/uploads/2026/10/REGISTERED_NON-RESIDENT_MERCHANTS_UPDATED_25.9.2026.pdf",
@@ -82,7 +83,7 @@ Suppose the fictional PDF renames an existing registrant on page 2 and adds a 93
 +  }
 ```
 
-- **Changed legal name (`EXAMPLE STREAMING B.V.` -> `EXAMPLE STREAMING EUROPE B.V.`)**: Verify on PDF page 2 that the change reflects the official `NAME OF NON RESIDENT MERCHANT` column after whitespace normalization, not a manual edit to match a consumer brand. Because `data/aliases.json` and `data/alias-evidence.json` match exact `legalName` strings, any alias still pointing to `"EXAMPLE STREAMING B.V."` fails validation (`Alias ... points to absent entity ...`) until updated to `"EXAMPLE STREAMING EUROPE B.V."` after checking that the existing evidence still applies to that legal entity.
+- **Changed legal name (`EXAMPLE STREAMING B.V.` -> `EXAMPLE STREAMING EUROPE B.V.`)**: Verify on PDF page 2 that the change reflects the official `NAME OF NON RESIDENT MERCHANT` column after whitespace normalization, not a manual edit to match a consumer brand. Unless the entity is in the `canonical` map in `scripts/build-merchants.ts`, `slug` updates automatically from `legalName` (`example-streaming-b-v` -> `example-streaming-europe-b-v`) and `tradingNames` stays `[]` (alias evidence populates `aliases`, not `tradingNames`). Because `data/aliases.json` and `data/alias-evidence.json` match exact `legalName` strings, any alias still pointing to `"EXAMPLE STREAMING B.V."` fails validation (`Alias ... points to missing legal entity ...`) until updated to `"EXAMPLE STREAMING EUROPE B.V."` after checking that the existing evidence still applies to that legal entity.
 - **New row (`NORTHWIND CLOUD SERVICES LIMITED`)**: Verify on PDF page 4 that the row number (`NO.`) is consecutive, the TIN column was present in the PDF (validated during extraction by `parseMerchantLines` in `scripts/build-merchants.ts` and intentionally omitted from `data/merchants.json`), `sourcePage` is the one-based PDF page (`4`), and `tradingNames` and `aliases` remain `[]` unless separate alias evidence is added. Do not infer a `country` field from `LIMITED` or `B.V.`.
 - **Removed or absent rows**: If a company disappears from a newer PDF or has never been listed, do not keep a stale entry or point an alias at an unlisted name. Absence from the dated GRA list only means there is no match in this snapshot; it does not prove that a supplier or transaction is tax-exempt or unregistered today.
 
@@ -126,7 +127,7 @@ Adding a fictional product alias `exampleplus` (or updating targets after a lega
 +  },
 ```
 
-- `validateAliasEvidence` in `lib/alias-provenance.ts` requires every key and `legalNames` array in `data/aliases.json` to match `data/alias-evidence.json`, all `sourceUrls` to use `https:`, and every `"product-association"` record to include at least one non-`gra.gov.gh` primary provider URL alongside the one-based `#page=` link to the GRA PDF.
+- **Automated checks vs manual review**: `validateAliasEvidence` in `lib/alias-provenance.ts` automatically checks that every alias key and `legalNames` target array in `data/aliases.json` matches `data/alias-evidence.json`, all `sourceUrls` use `https:`, and every `"product-association"` record includes at least one URL with a non-`gra.gov.gh` hostname. The maintainer still needs to manually verify that the cited provider URL has authority for that product/entity and that the `#page=` link points to the correct one-based GRA PDF page.
 - Keep the `note` factual about which contracting entity the provider page names and its regional or plan limits; do not invent taxability, collection or refund rules. If multiple listed legal entities share a brand, include all of them in `legalNames` so search results preserve every candidate for receipt comparison.
 
 ### 4. When to stop for manual review
@@ -135,7 +136,7 @@ Stop the refresh and investigate manually rather than weakening checks or editin
 
 - `pnpm data:check` or `pnpm data:build` reports an HTTP redirect or final URL change (even on `gra.gov.gh`), which indicates GRA moved or replaced the file path.
 - `parseMerchantLines` fails on missing `NO. TIN NAME OF NON RESIDENT MERCHANT` headers, nonconsecutive row numbers, a missing or malformed TIN, duplicate row numbers/TINs/legal names, or an unrecognised line at the top of a new page (wrapped legal names are joined only to the preceding row on the same page).
-- The extracted merchant count drops below 85% of the previous `merchantCount` in `data/source-meta.json` (or below the 70-row minimum floor).
+- The extracted merchant count drops below 85% of the baseline count (or below the 70-row minimum floor): `pnpm data:check` compares against `merchantCount` in `data/source-meta.json`, whereas `pnpm data:build` compares against the existing `data/merchants.json` dataset length.
 - A provider terms page names only a regional contracting entity that is not present in the GRA PDF; do not substitute the unlisted entity into `data/aliases.json` or `data/merchants.json`.
 
 ## Source interpretation
