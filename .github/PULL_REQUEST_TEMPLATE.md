@@ -15,3 +15,5 @@ List commands actually run and their results. Explain skipped checks.
 - [ ] Keyboard, 360px and language behavior checked when relevant.
 - [ ] No personal financial data, trackers, remote scripts or secrets introduced.
 - [ ] Documentation and assumptions updated where needed.
+
+If you find this project useful, please consider starring the repository as a small gesture of support. Stars are optional and do not affect how contributions are reviewed.

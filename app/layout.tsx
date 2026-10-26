@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Suspense } from 'react';
 import '@fontsource/instrument-sans/latin-400.css';
 
 import '@fontsource/instrument-sans/latin-600.css';
@@ -14,7 +15,18 @@ export const metadata: Metadata = {
   description:
     'Check Ghana’s official digital merchant list, estimate VAT and understand charges on foreign digital services.',
   alternates: { canonical: SITE_URL },
-  openGraph: { type: 'website', siteName: 'VAT Check GH', images: ['/opengraph-image.png'] },
+  openGraph: {
+    type: 'website',
+    siteName: 'VAT Check GH',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'VAT Check GH. Check Ghana digital VAT.',
+      },
+    ],
+  },
   icons: { icon: '/icon.svg' },
 };
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#F7F5F0' };
@@ -28,7 +40,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
           <Header />
           <Offline />
-          <main id="main">{children}</main>
+          <main id="main">
+            {/* Isolate streamed Flight children from host hydration replay in Next 15.
+                https://github.com/react/react/issues/37584 */}
+            <Suspense fallback={null}>{children}</Suspense>
+          </main>
           <Footer />
         </LanguageProvider>
       </body>
